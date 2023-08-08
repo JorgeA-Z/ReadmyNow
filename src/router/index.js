@@ -10,6 +10,8 @@ const router = createRouter({
         { path: "/Results", component: () => import("../views/Results.vue") },
         { path: "/Search", component: () => import("../views/Search.vue") },
         { path: "/Discover", component: () => import("../views/Discover.vue") },
+        { path: "/Login", component: () => import("../views/Login.vue") },
+        { path: "/Register", component: () => import("../views/Register.vue") },
     ],
 });
 export default router;
