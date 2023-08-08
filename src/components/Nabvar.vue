@@ -18,10 +18,10 @@ import IconProfile from '../components/icons/IconProfile.vue';
 
       <nav>
         <ul class="nav-links">
-          <li><a href=""><IconHouse/> <span class="nombre">Home</span></a></li>
-          <li><a href=""><IconSearch/> <span class="nombre">Search</span> </a></li>
-          <li><a href=""><IconRead/> <span class="nombre">Read</span> </a></li>
-          <li><a href=""><IconProfile/> <span class="nombre">Profile</span></a></li>
+          <li><router-link class="link" to="/Discover"><IconHouse/> <span class="nombre">Home</span></router-link></li>
+          <li><router-link class="link" to="/Search"><IconSearch/> <span class="nombre">Search</span></router-link></li>
+          <li><router-link class="link" to="/"><IconRead/> <span class="nombre">Read</span></router-link></li>
+          <li><router-link class="link" to="/Profile"><IconProfile/> <span class="nombre">Profile</span></router-link></li>
         </ul>
       </nav>
 
@@ -92,7 +92,7 @@ import IconProfile from '../components/icons/IconProfile.vue';
   transform: scale(1.1);
 }
 
-.header .nav-links a
+.header .nav-links .link
 {
   font-size: 18px;
   color: #7A60A9;
@@ -105,7 +105,7 @@ import IconProfile from '../components/icons/IconProfile.vue';
   letter-spacing: -0.27px;
 }
 
-.header .nav-links li a:hover
+.header .nav-links li .link:hover
 {
   color: #D6C8E1;
 }
