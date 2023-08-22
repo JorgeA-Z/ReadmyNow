@@ -2,6 +2,39 @@
 import Carruselprofile from '../components/Carruselprofile.vue';
 import Nabvar from '../components/Nabvar.vue';
 
+import {onMounted, ref} from "vue";
+import {getAuth, onAuthStateChanged, signOut} from "firebase/auth";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const isLoggedIn = ref(false);
+
+let auth;
+onMounted(() =>  {
+  auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if(user)
+    {
+      isLoggedIn.value = true;
+
+    }else
+    {
+      isLoggedIn.value = false;
+    }
+  });
+
+});
+
+const handleSingOut = () =>
+{
+  signOut(auth).then(()=>{
+    router.push("/");
+  });
+
+
+};
+
+
 </script>
 
 <template>
@@ -61,6 +94,12 @@ import Nabvar from '../components/Nabvar.vue';
       </div>
     </div>
   </div>
+  <div class="d-flex d-flex justify-content-center vh-100">
+    <button class="boton1" @click="handleSingOut">
+      LOG OUT
+    </button>
+  </div>
+
 </template>
 
 <style scoped>
