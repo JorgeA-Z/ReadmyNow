@@ -1,6 +1,8 @@
 <script setup>
 import Text from '../components/Text.vue';
 import Nabvar from '../components/Nabvar.vue';
+import Carruseldiscover from '../components/Carruseldiscover.vue';
+import Galerydiscover from '../components/Galerydiscover.vue';
 
 </script>
 
@@ -10,17 +12,20 @@ import Nabvar from '../components/Nabvar.vue';
 
   <Nabvar/>
 
-  <div class="m-4">
+  <div class="m-3">
+
     <span class="text">What’s new today</span>
 
-    
-    
+
+      <Carruseldiscover/>
+
+
   </div>
 
-  <div class="m-4">
+  <div class="m-3">
     <span class="text">my bookshelf</span>
 
-    
+    <Galerydiscover/>
     
   </div>
 
