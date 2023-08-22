@@ -1,6 +1,5 @@
 <script setup>
 import Nabvar from './components/Nabvar.vue';
-
 </script>
 
 <template>
@@ -37,6 +36,8 @@ import Nabvar from './components/Nabvar.vue';
 
   <main>
     <RouterView></RouterView>
+
+
   </main>
 
 </template>

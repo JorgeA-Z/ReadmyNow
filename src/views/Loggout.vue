@@ -3,7 +3,6 @@ import BtnLogIn from '../components/BtnLogIn.vue';
 import BtnRegister from '../components/BtnRegister.vue';
 import Logotipo from '../components/Logotipo.vue'
 
-
 </script>
 
 <template>
@@ -12,8 +11,20 @@ import Logotipo from '../components/Logotipo.vue'
       <Logotipo />
 
       <div class="position">
-        <BtnLogIn />
-        <BtnRegister/>
+
+        <router-link to="/Login">
+          <BtnLogIn>
+          </BtnLogIn>
+        </router-link>
+        
+        <router-link to="/Register">
+          <BtnRegister>
+          </BtnRegister>
+        </router-link>
+
+
+
+
       </div>
     </div>
   </div>
