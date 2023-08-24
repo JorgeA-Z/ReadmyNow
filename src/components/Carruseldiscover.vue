@@ -85,8 +85,7 @@ export default defineComponent({
 
 .titulo {
     color: #7A60A9;
-    /*
-    font-family: 'Comfortaa', cursive;*/
+    font-family: 'Comfortaa', cursive;
     font-size: 13px;
     font-style: normal;
     font-weight: 700;
@@ -96,8 +95,7 @@ export default defineComponent({
 
 .autor {
     color: #D6C8E1;
-    /*
-    font-family: 'Comfortaa', cursive;*/
+    font-family: 'Comfortaa', cursive;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
