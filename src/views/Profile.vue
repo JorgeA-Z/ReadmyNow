@@ -9,9 +9,13 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const isLoggedIn = ref(false);
 
-let auth;
+const auth = getAuth();
+
+const image = auth.currentUser.photoURL;
+const name = auth.currentUser.displayName;
+const email = auth.currentUser.email;
+
 onMounted(() =>  {
-  auth = getAuth();
   onAuthStateChanged(auth, (user) => {
     if(user)
     {
@@ -22,7 +26,6 @@ onMounted(() =>  {
       isLoggedIn.value = false;
     }
   });
-
 });
 
 const handleSingOut = () =>
@@ -33,7 +36,7 @@ const handleSingOut = () =>
 
 
 };
-
+console.log(image)
 
 </script>
 
@@ -43,23 +46,26 @@ const handleSingOut = () =>
   <div class="container">
     <div class="row">
       <div class="col-lg-5">
-
+        
         <div class="row justify-content-center align-self-center">
-          <img
-            src="https://brightspotcdn.byu.edu/dims4/default/08176f1/2147483647/strip/true/crop/1600x1600+404+0/resize/1200x1200!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2Fa9%2F65%2Fd053ce8e8fc85827b50b449b47cb%2F1609-26-32.jpg"
-            class="m-4 rounded-circle img-fluid img-user" alt="">
+
+          <img :src=image class="m-4 rounded-circle img-fluid img-user" alt="">
 
 
 
-          <h1 class="mt-4 text-center text-capitalize text-user">angel</h1>
+          <h1 class="mt-4 text-center text-capitalize text-user">{{name}}</h1>
 
-          <h2 class="mt-4 text-center text-location">guadalajara, jal</h2>
+          <h2 class="mt-4 text-center text-location">{{email}}</h2>
+          
+          <router-link class="mt-4 mx-2 config" to="/Config">
+              <div class="btn text">
+              CONFIG
+              </div>
+          </router-link>
+            
+          
 
-          <button type="submit" class="mt-4 mx-2 btn config">
-            CONFIG
-          </button>
-
-          <button type="submit" class="mt-4 mx-2 btn log-out">
+          <button class="mt-4 mx-2 btn log-out"  @click="handleSingOut">
             LOG OUT
           </button>
 
@@ -94,12 +100,6 @@ const handleSingOut = () =>
       </div>
     </div>
   </div>
-  <div class="d-flex d-flex justify-content-center vh-100">
-    <button class="boton1" @click="handleSingOut">
-      LOG OUT
-    </button>
-  </div>
-
 </template>
 
 <style scoped>
@@ -152,6 +152,10 @@ const handleSingOut = () =>
   text-transform: uppercase;
 }
 
+.text
+{
+  color: #FFF;
+}
 .config:focus {
   border-color: rgb(122, 96, 169);
   box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169, 0.6);

@@ -20,7 +20,7 @@ import IconProfile from '../components/icons/IconProfile.vue';
         <ul class="nav-links">
           <li><router-link class="link" to="/Discover"><IconHouse/> <span class="nombre">Home</span></router-link></li>
           <li><router-link class="link" to="/Search"><IconSearch/> <span class="nombre">Search</span></router-link></li>
-            <li><router-link class="link" to="/"><IconRead/> <span class="nombre">Read</span></router-link></li>
+            <li><router-link class="link" to="/Abook"><IconRead/> <span class="nombre">Read</span></router-link></li>
           <li><router-link class="link" to="/Profile"><IconProfile/> <span class="nombre">Profile</span></router-link></li>
         </ul>
       </nav>

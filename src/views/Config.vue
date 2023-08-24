@@ -4,6 +4,13 @@ import Arrow from '../components/icons/Arrow.vue';
 import Gear from '../components/icons/Gear.vue';
 import Direction from '../components/icons/Direction.vue';
 import Plus from '../components/icons/Plus.vue';
+import {getAuth} from "firebase/auth";
+
+const auth = getAuth();
+
+const image = auth.currentUser.photoURL;
+const name = auth.currentUser.displayName;
+
 
 </script>
 
@@ -13,8 +20,9 @@ import Plus from '../components/icons/Plus.vue';
   <div class="container">
 
     <div class="mt-4 mb-3 d-flex setting">
-
-      <Arrow />
+      <router-link to="/Profile">
+        <Arrow />
+      </router-link>
 
       <h1 class="title">
         <Gear />Settings
@@ -35,18 +43,18 @@ import Plus from '../components/icons/Plus.vue';
 
         <div class="row justify-content-center">
             <img
-              src="https://brightspotcdn.byu.edu/dims4/default/08176f1/2147483647/strip/true/crop/1600x1600+404+0/resize/1200x1200!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2Fa9%2F65%2Fd053ce8e8fc85827b50b449b47cb%2F1609-26-32.jpg"
+              :src=image
               class="m-4 rounded-circle img-fluid img-user" alt="">
 
-            <h1 class=" text-capitalize text-user">angel</h1>
+            <h1 class=" text-capitalize text-user">{{name}}</h1>
         </div>
 
         <div class="d-flex responsive">
           <img
-            src="https://brightspotcdn.byu.edu/dims4/default/08176f1/2147483647/strip/true/crop/1600x1600+404+0/resize/1200x1200!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2Fa9%2F65%2Fd053ce8e8fc85827b50b449b47cb%2F1609-26-32.jpg"
+          :src=image
             class="ms-2 me-3 rounded-circle img-fluid img-respon" alt="">
 
-          <h1 class=" text-capitalize text-users">angel</h1>
+          <h1 class=" text-capitalize text-users">{{ name }}</h1>
         </div>
 
 
