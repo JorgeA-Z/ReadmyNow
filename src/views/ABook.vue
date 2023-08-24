@@ -6,9 +6,6 @@ import reader from '../components/reader.vue';
 </script>
 
 <template>
-
-  
-
   <Nabvar />
 
   <!-- Foto y datos del libro y su autor -->
@@ -47,52 +44,57 @@ import reader from '../components/reader.vue';
   <img src="https://m.media-amazon.com/images/P/B014R3ODUI.01._SCLZZZZZZZ_SX500_.jpg" class="img-fluid imagenbook"
     alt="img-libro">
 
-  <!-- Botones para leer y compartir -->
-  <div class="row my-4 justify-content-center">
+  <div class="container">
 
-    <button type="submit" class="me-3 me-md-5 btn read">
-      READ
-    </button>
+    <!-- Botones para leer y compartir -->
+    <div class="my-4 row justify-content-center">
 
-    <button type="submit" class="btn share">
-      SHARE
-    </button>
+      <button type="submit" class="me-4 me-sm-5 btn read">
+        READ
+      </button>
 
-  </div>
-
-  <!-- Info del libro -->
-  <div class="row">
-
-    <div class=" col-lg-6">
-
-      <h5 class="py-4 ps-4 py-sm-4 ps-sm-5 text-uppercase about">About The book</h5>
-
-      <p class="px-4 ps-sm-5 pe-sm-5 ps-lg-5 pe-lg-4 text-break about-text">Frankenstein es una historia macabra en la que
-        Víctor, un joven ávido de conocimientos
-        científicos, se obsesiona por lograr el mayor reto posible en el mundo científico: dar vida a un cuerpo muerto. Su
-        éxito será su condena, la creación de un monstruo estremecedor que, en respuesta a su rechazo por todos se entrega
-        por completo a saciar una sed de venganza hacia su creador, culpable de su desgracia, y hacia todo lo que éste
-        ama, tornando en muerte todo alrededor de Víctor. El monstruo, enfermo de soledad, solicita una compañera a su
-        creador a cambio de desaparecer para siempre, pero Víctor se niega a ello, provocando así que la única salida
-        hacia la paz y el descanso sea el fin de uno de los dos.</p>
+      <button type="submit" class="btn share">
+        SHARE
+      </button>
 
     </div>
-    <div class="col-lg-6">
 
-      <h5 class="py-4 ps-4 py-sm-4 ps-sm-5 text-uppercase about">About the autor</h5>
+    <div class="row">
 
-      <p class="px-4 px-sm-5 text-break about-text">Mary Shelley nace en Londres en 1797, hija de dos pensadores
-        progresistas que establecerán las
-        bases de su avanzada educación. Su madre, Mary Wollstonecraft, era una conocida pionera del feminismo. En 1816 se
-        casa con el poeta Percy B. Shelley. Su tendencia a la depresión y la tensa relación con su marido marcarán su vida
-        y su obra. Muere en 1851 en Italia. De su obra destacan Frankenstein (1818), Valperga (1823) y The last man
-        (1826).</p>
+      <!-- Info del libro -->
+      <div class="col-lg-6">
 
+        <h5 class="py-3 ps-2 ps-md-0 text-uppercase about">About The book</h5>
+
+        <p class="px-2 px-md-0 pe-lg-4 text-break about-text">Frankenstein es una historia macabra en la
+          que
+          Víctor, un joven ávido de conocimientos
+          científicos, se obsesiona por lograr el mayor reto posible en el mundo científico: dar vida a un cuerpo muerto.
+          Su
+          éxito será su condena, la creación de un monstruo estremecedor que, en respuesta a su rechazo por todos se
+          entrega
+          por completo a saciar una sed de venganza hacia su creador, culpable de su desgracia, y hacia todo lo que éste
+          ama, tornando en muerte todo alrededor de Víctor. El monstruo, enfermo de soledad, solicita una compañera a su
+          creador a cambio de desaparecer para siempre, pero Víctor se niega a ello, provocando así que la única salida
+          hacia la paz y el descanso sea el fin de uno de los dos.</p>
+
+      </div>
+      <div class="col-lg-6">
+
+        <h5 class="py-3 ps-2 ps-md-0 text-uppercase about">About the autor</h5>
+
+        <p class="px-2 px-md-0 text-break about-text">Mary Shelley nace en Londres en 1797, hija de dos pensadores
+          progresistas que establecerán las
+          bases de su avanzada educación. Su madre, Mary Wollstonecraft, era una conocida pionera del feminismo. En 1816
+          se
+          casa con el poeta Percy B. Shelley. Su tendencia a la depresión y la tensa relación con su marido marcarán su
+          vida
+          y su obra. Muere en 1851 en Italia. De su obra destacan Frankenstein (1818), Valperga (1823) y The last man
+          (1826).</p>
+
+      </div>
     </div>
   </div>
-
-  
-
 </template>
 
 <style scoped>
