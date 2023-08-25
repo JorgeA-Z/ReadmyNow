@@ -50,11 +50,11 @@ export default defineComponent({
             <div class="m-2 carrusel">
                 <router-link class="link" to="/ABook">
 
-                    <img src="https://m.media-amazon.com/images/S/amzn-author-media-prod/bsf846hh2eo2dse1t05c5rmq2e._SX450_.jpg"
+                    <img src=""
                             class="img-autor" alt="">
                     
                     <picture>
-                        <img src="https://m.media-amazon.com/images/P/B014R3ODUI.01._SCLZZZZZZZ_SX500_.jpg" class="img-libro"
+                        <img src="" class="img-libro"
                             alt="">
                     </picture>
 

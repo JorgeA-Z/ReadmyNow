@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from "vue"
+
 import Nabvar from '../components/Nabvar.vue';
 import Reader from '../components/Reader.vue';
+import { ref } from 'vue'
 
 const book = ref(false);
 
@@ -10,13 +11,22 @@ const popbook = () =>
   book.value = !book.value;
 
 }
-console.log(book)
+
+
 </script>
 
 <template>
 
   <div v-if="book==true">
-    <Reader link="gs://readmynow-87dfb.appspot.com/Escuadron - Brandon Sanderson.epub"></Reader>
+    <Reader link="https://firebasestorage.googleapis.com/v0/b/readmynow-87dfb.appspot.com/o/castillo.epub?alt=media&token=200c4ff3-94bd-4c61-94fa-fecf6c20f32b" ></Reader>
+
+
+    <!--
+      https://firebasestorage.googleapis.com/v0/b/readmynow-87dfb.appspot.com/o/
+      'castillo.epub'
+      ?alt=media&token=
+      '200c4ff3-94bd-4c61-94fa-fecf6c20f32b'
+    -->
 
   </div>
   

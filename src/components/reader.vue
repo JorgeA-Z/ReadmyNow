@@ -4,7 +4,7 @@ import ePub from 'epubjs';
 const props = defineProps(['link'])
 var book = ePub(props.link);
 
-var rendition = book.renderTo("area", { flow: "scrolled-doc" , allowScriptedContent: true, height:'100%', width: '100%'});
+var rendition = book.renderTo("area", {manager: "continuous", flow: "paginated", allowScriptedContent: true, width: "900", height: "600"});
 
 
 var displayed = rendition.display();

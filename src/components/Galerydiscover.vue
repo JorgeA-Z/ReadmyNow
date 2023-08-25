@@ -8,123 +8,123 @@ import { RouterLink } from 'vue-router';
         <div class="row">
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <!--
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>
             <div class="col-lg-2 col-md-3 col-6 col-sm">
                 <router-link class="link" to="/ABook">
-                    <img class="img-fluid m-2" src="../assets/img/Rectangle 2.9.png" alt="">
+                    <img class="img-fluid m-2" src="" alt="">
                 </router-link>
             </div>-->
             
