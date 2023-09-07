@@ -24,8 +24,9 @@ import Galerydiscover from '../components/Galerydiscover.vue';
 
   <div class="m-3">
     <span class="text">my bookshelf</span>
+    
+    <Galerydiscover></Galerydiscover>
 
-    <Galerydiscover/>
     
   </div>
 

@@ -5,19 +5,27 @@ import IconGoo from '../components/icons/IconGoo.vue';
 
 
 import { ref } from "vue"
-import {getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { getFirestore, collection, addDoc, doc, query, where, getDocs } from 'firebase/firestore';
 import { useRouter } from "vue-router";
 
 const email = ref("");
 const password = ref("");
 const router = useRouter()
+
+const db = getFirestore();
+
+
+
 const register = () => {
     createUserWithEmailAndPassword(getAuth(), email.value, password.value)
-        .then((data) =>{
-            console.log("Registered Success!!");
+        .then((data) => {
+
+            CreateUser(data.user.uid);
+
             router.push('/Discover')
         })
-        .catch((error)=> {
+        .catch((error) => {
             console.log(error.code);
             alert(error.message);
         })
@@ -26,31 +34,49 @@ const register = () => {
 const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(getAuth(), provider)
-    .then((result)=>
-    {
-        console.log(result.user);
-        router.push("/Discover")
+        .then((result) => {
+            CreateUser(result.user.uid);
+            router.push("/Discover")
 
-    })
-    .catch((error)=>
-    {
-        console.log(error.code);
-        alert(error.message);
-    })
+        })
+        .catch((error) => {
+            console.log(error.code);
+            alert(error.message);
+        })
 
 };
+const CreateUser = (User) => {
+
+    const q = query(collection(db, "Librero"), where("User", "==", User));
+
+    getDocs(q).then((querySnapshot) => {
+
+        if (querySnapshot.empty) {
+            
+            addDoc(collection(db, 'Librero'), {
+                Libros: [],
+                User: User,
+            });
+
+
+        }
+    });
+
+}
+
+
 
 </script>
 
 <template>
     <Text />
-    
+
     <div class="d-flex d-flex justify-content-center vh-100">
         <div class="d-flex d-flex justify-content-center align-items-center">
             <div>
 
                 <router-link to="/">
-                    <Flecha/>
+                    <Flecha />
                 </router-link>
 
                 <div class="mb-3 mt-3">
@@ -65,13 +91,13 @@ const signInWithGoogle = () => {
                     <input type="password" class="form-control general" required placeholder="password" v-model="password">
                 </div>
 
-  
+
                 <button type="submit" class="btn boton1" @click="register">
                     LOG IN
                 </button>
 
                 <button type="submit" class="btn boton2" @click="signInWithGoogle">
-                    <IconGoo/>
+                    <IconGoo />
                 </button>
 
             </div>
@@ -122,8 +148,7 @@ const signInWithGoogle = () => {
     line-height: normal;
 }
 
-.boton1
-{
+.boton1 {
     border: 3px solid #7A60A9;
     color: #7A60A9;
     background-color: #D6C8E1;
@@ -145,8 +170,7 @@ const signInWithGoogle = () => {
 
 }
 
-.boton2
-{
+.boton2 {
     width: 167px;
     height: 52px;
     flex-shrink: 0;
@@ -155,11 +179,10 @@ const signInWithGoogle = () => {
     border: 3px solid #7A60A9;
 
 }
+
 .btn:focus {
-    border-color:rgb(122, 96, 169);
-    box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169,0.6);
+    border-color: rgb(122, 96, 169);
+    box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169, 0.6);
     outline: 0 none;
 }
-
-
 </style>

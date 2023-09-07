@@ -2,47 +2,86 @@
 
 import Nabvar from '../components/Nabvar.vue';
 import Reader from '../components/Reader.vue';
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import {getFirestore, collection, query, where, getDoc, doc} from "firebase/firestore";;
 
-const book = ref(false);
+const props = defineProps(['ID'])
+
+const db = getFirestore();
+
+const bookData = ref([]);
+const AutorData = ref([]);
+const bookRef = doc(db, "Libro", props.ID);
+onMounted(async () => {
+  try {
+    const bookDoc = await getDoc(bookRef);
+    if (bookDoc.exists()) {
+      bookData.value = {
+        ID: bookDoc.id,
+        Caratula: bookDoc.get('Caratula'),
+        Genero: bookDoc.get('Genero'),
+        Nombre: bookDoc.get('Nombre'),
+        Subgenero: bookDoc.get('Subgenero'),
+        Url: bookDoc.get('Url'),
+        About: bookDoc.get('About')
+      };
+
+      const autDoc = await getDoc(bookDoc.get('Autor'));
+      
+      if (autDoc.exists()) {
+        AutorData.value = {
+          Apellido: autDoc.get('Apellido'),
+          Nombre: autDoc.get('Nombre'),
+          Url: autDoc.get('Url'),
+          About: autDoc.get('About')
+        };
+
+      };
+
+
+
+
+    } else {
+      console.log('El documento no existe.');
+    }
+  } catch (error) {
+    console.error('Error al obtener el documento:', error);
+  }
+});
+
+const reading = ref(false);
 
 const popbook = () => 
 {
-  book.value = !book.value;
+  reading.value = !reading.value;
+}    
 
+const favorites = () =>
+{
+  console.log(bookData.value.ID)
 }
-
 
 </script>
 
 <template>
-
-  <div v-if="book==true">
-    <Reader link="https://firebasestorage.googleapis.com/v0/b/readmynow-87dfb.appspot.com/o/castillo.epub?alt=media&token=200c4ff3-94bd-4c61-94fa-fecf6c20f32b" ></Reader>
-
-
-    <!--
-      https://firebasestorage.googleapis.com/v0/b/readmynow-87dfb.appspot.com/o/
-      'castillo.epub'
-      ?alt=media&token=
-      '200c4ff3-94bd-4c61-94fa-fecf6c20f32b'
-    -->
+  <div v-if="reading==true">
+    <Reader :link="bookData.Url"></Reader>
 
   </div>
   
-  <div v-if="book==false">
+  <div v-if="reading==false">
 
     <Nabvar />
     
     <!-- Foto y datos del libro y su autor -->
     <div class="d-flex acomodo">
-      <img src="https://m.media-amazon.com/images/S/amzn-author-media-prod/bsf846hh2eo2dse1t05c5rmq2e._SX450_.jpg"
+      <img :src="AutorData.Url"
       class="mt-3 ms-3 me-2 mx-sm-3 img-auto" alt="IMG-AUTOR">
       
       <div class="mt-3 mt-sm-4">
-        <h5 class="text-capitalize text-break titulo">el archivo de las tormentas</h5>
+        <h5 class="text-capitalize text-break titulo">{{bookData.Nombre}}</h5>
         
-        <h5 class="text-capitalize text-break autor">brandon Sanderson</h5>
+        <h5 class="text-capitalize text-break autor">{{AutorData.Nombre}} {{AutorData.Apellido}}</h5>
       </div>
       
     </div>
@@ -50,16 +89,17 @@ const popbook = () =>
     <!-- Iconos para favoritos y para cerrar -->
     <div class="d-flex icons">
       
-      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="34" viewBox="0 0 22 20" fill="none" class="mx-2 equis">
+      <svg @click="favorites" xmlns="http://www.w3.org/2000/svg" width="30" height="34" viewBox="0 0 22 20" fill="none" class="mx-2 equis">
         <path
         d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
         stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
-      
-      
-      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="34" viewBox="0 0 24 24" fill="none" class="equis">
-        <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
+
+      <router-link to="/Discover">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="34" viewBox="0 0 24 24" fill="none" class="equis">
+          <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </router-link>
       
     </div>
     
@@ -67,7 +107,7 @@ const popbook = () =>
     <div class="gradient"></div>
     
     <!-- Imagen del libro -->
-    <img src="https://m.media-amazon.com/images/P/B014R3ODUI.01._SCLZZZZZZZ_SX500_.jpg" class="img-fluid imagenbook"
+    <img :src="bookData.Caratula" class="img-fluid imagenbook"
     alt="img-libro">
     
     <div class="container">
@@ -92,36 +132,18 @@ const popbook = () =>
           
           <h5 class="py-3 ps-2 ps-md-0 text-uppercase about">About The book</h5>
           
-          <p class="px-2 px-md-0 pe-lg-4 text-break about-text">Frankenstein es una historia macabra en la
-            que
-            Víctor, un joven ávido de conocimientos
-            científicos, se obsesiona por lograr el mayor reto posible en el mundo científico: dar vida a un cuerpo muerto.
-            Su
-            éxito será su condena, la creación de un monstruo estremecedor que, en respuesta a su rechazo por todos se
-            entrega
-            por completo a saciar una sed de venganza hacia su creador, culpable de su desgracia, y hacia todo lo que éste
-            ama, tornando en muerte todo alrededor de Víctor. El monstruo, enfermo de soledad, solicita una compañera a su
-            creador a cambio de desaparecer para siempre, pero Víctor se niega a ello, provocando así que la única salida
-            hacia la paz y el descanso sea el fin de uno de los dos.</p>
+          <p class="px-2 px-md-0 pe-lg-4 text-break about-text">{{bookData.About}}</p>
             
           </div>
           <div class="col-lg-6">
             
             <h5 class="py-3 ps-2 ps-md-0 text-uppercase about">About the autor</h5>
             
-            <p class="px-2 px-md-0 text-break about-text">Mary Shelley nace en Londres en 1797, hija de dos pensadores
-              progresistas que establecerán las
-              bases de su avanzada educación. Su madre, Mary Wollstonecraft, era una conocida pionera del feminismo. En 1816
-              se
-              casa con el poeta Percy B. Shelley. Su tendencia a la depresión y la tensa relación con su marido marcarán su
-              vida
-              y su obra. Muere en 1851 en Italia. De su obra destacan Frankenstein (1818), Valperga (1823) y The last man
-              (1826).</p>
+            <p class="px-2 px-md-0 text-break about-text">{{AutorData.About}}</p>
               
             </div>
           </div>
         </div>
-
       </div>
       </template>
 

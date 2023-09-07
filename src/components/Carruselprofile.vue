@@ -1,10 +1,21 @@
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onUnmounted } from 'vue'
 import { Carousel, Navigation, Slide } from 'vue3-carousel'
+import { getFirestore, onSnapshot, collection, doc, deleteDoc, query, getDoc, where } from 'firebase/firestore';
+import { getAuth } from "firebase/auth"
+
 
 import 'vue3-carousel/dist/carousel.css'
 
+const db = getFirestore();
+
 export default defineComponent({
+    props:
+    {
+        User: String,
+
+    },
+
     name: 'Breakpoints',
     components: {
         Carousel,
@@ -12,6 +23,8 @@ export default defineComponent({
         Navigation,
     },
     data: () => ({
+        Libros: ref([]),
+        Cantidad: ref(0),
         // carousel settings
         settings: {
             itemsToShow: 1.5,
@@ -41,30 +54,71 @@ export default defineComponent({
             },
         },
     }),
+    mounted() {
+
+        const latestQuery = query(collection(db, "Librero"), where("User", "==", this.User));
+        const liveLibros = onSnapshot(latestQuery, async (snapshot) => {
+            this.Libros = await Promise.all(snapshot.docs.map(async (Shelf) => {
+
+                var books = Shelf.get('Libros');
+
+                for (var book of books) {
+                    const Detalle = await getDoc(book);
+
+                    const bookDoc = await getDoc(Detalle.get("Libro"));
+                    
+                    const AutorRef = bookDoc.get('Autor'); // Supongo que 'Genero' es una referencia a otro documento
+
+                    const AutorDoc = await getDoc(AutorRef); // Obtener el documento referenciado   
+                    
+                    this.Cantidad = this.Cantidad + 1;
+
+                    return {
+
+                        id: bookDoc.id,
+                        Caratula: bookDoc.get('Caratula'),
+                        Genero: bookDoc.get('Genero'),
+                        Nombre: bookDoc.get('Nombre'),
+                        Subgenero: bookDoc.get('Subgenero'),
+                        Url: bookDoc.get('Url'),
+                        AutorName: AutorDoc.get('Nombre'),
+                        AutorLastName: AutorDoc.get('Apellido'),
+                        AutorURL: AutorDoc.get('Url')
+                    }
+                }
+
+            }));
+        });
+        onUnmounted(liveLibros)
+    }
 })
 </script>
 
 <template>
-    <Carousel v-bind="settings" :breakpoints="breakpoints">
-        <Slide v-for="slide in 10" :key="slide">
-            <div class="m-2 carrusel">
-                <router-link class="link" to="/ABook">
+    <div v-if="Cantidad == 0" class="m-2 carrusel">
+        <small class="text-capitalize titulo2">Try adding some books</small>
+    </div>
 
-                    <img src="https://m.media-amazon.com/images/S/amzn-author-media-prod/bsf846hh2eo2dse1t05c5rmq2e._SX450_.jpg"
-                            class="img-autor" alt="">
+    <Carousel v-if="Cantidad > 0" v-bind="settings" :breakpoints="breakpoints">
+        <Slide v-for="(Libro, index) in Libros" :key="index">
+            <div class="m-2 carrusel">
+                
+                <router-link class="link" :to="'/Abook/'+ Libro.id">
+                    
+                    <img :src="Libro.AutorURL"
+                    class="img-autor" alt="">
                     
                     <picture>
-                        <img src="https://m.media-amazon.com/images/P/B014R3ODUI.01._SCLZZZZZZZ_SX500_.jpg" class="img-libro"
-                            alt="">
+                        <img :src="Libro.Caratula" class="img-libro"
+                        alt="">
                     </picture>
-
-                    <div class="mt-3 general">
-
-                        <span class="text-capitalize titulo">el archivo de las tormentas</span>
-                        
-                        <span class="text-capitalize autor">brandon Sanderson</span>
-
-                    </div>
+                            <div class="mt-3 general">
+                                
+                                <span class="text-capitalize titulo">{{Libro.Nombre}}</span>
+                                
+                                <span class="text-capitalize autor">{{Libro.AutorName}} {{Libro.AutorLastName}}</span>
+                                
+                            </div>
                 </router-link>
             </div>
         </Slide>
@@ -86,13 +140,20 @@ export default defineComponent({
 .titulo {
     color: #7A60A9;
     font-family: 'Comfortaa', cursive;
-    font-size: 13px;
+    font-size: 12px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
 
 }
-
+.titulo2 {
+    color: #D6C8E1;
+    font-family: 'Comfortaa', cursive;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
 .autor {
     color: #D6C8E1;
     font-family: 'Comfortaa', cursive;
@@ -125,7 +186,7 @@ export default defineComponent({
     width: 160px;
     border-radius: 15px;
     border: 3.5px solid #7A60A9;
-    box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169,0.6);
+    box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169, 0.6);
     transition: .3s ease-in-out;
 }
 </style>

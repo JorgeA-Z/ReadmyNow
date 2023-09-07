@@ -1,7 +1,7 @@
 <script setup>
 import Carruselprofile from '../components/Carruselprofile.vue';
 import Nabvar from '../components/Nabvar.vue';
-
+import CarruselFavorites from '../components/CarruselFavorites.vue';
 import {onMounted, ref} from "vue";
 import {getAuth, onAuthStateChanged, signOut} from "firebase/auth";
 import { useRouter } from "vue-router";
@@ -15,8 +15,13 @@ const image = auth.currentUser.photoURL;
 const name = auth.currentUser.displayName;
 const email = auth.currentUser.email;
 
+const ID = auth.currentUser.uid;
+
+
+
 onMounted(() =>  {
   onAuthStateChanged(auth, (user) => {
+    
     if(user)
     {
       isLoggedIn.value = true;
@@ -33,10 +38,7 @@ const handleSingOut = () =>
   signOut(auth).then(()=>{
     router.push("/");
   });
-
-
 };
-console.log(image)
 
 </script>
 
@@ -82,16 +84,15 @@ console.log(image)
 
         <div class="m-3 mt-sm-5 mt-lg-4">
           <h4 class="text-left text-uppercase favorities">Favorites</h4>
-
-          <Carruselprofile/>
+          <CarruselFavorites :User="ID"></CarruselFavorites>
+          
 
         </div>
 
         <div class="m-3 mt-sm-5 mt-lg-4">
 
           <h4 class="text-left text-uppercase reading">Reading</h4>
-
-          <Carruselprofile/>
+          <Carruselprofile :User="ID"></Carruselprofile>
 
         </div>
 

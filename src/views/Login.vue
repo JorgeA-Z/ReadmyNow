@@ -7,15 +7,19 @@ import Flecha from '../components/icons/Flecha.vue';
 import { ref } from "vue"
 import {getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from "firebase/auth"
 import { useRouter } from "vue-router";
+import { getFirestore, collection, addDoc, doc, query, where, getDocs } from 'firebase/firestore';
+
 
 const email = ref("");
 const password = ref("");
 const errMsg = ref();
 const router = useRouter()
+
+const db = getFirestore();
+
 const register = () => {
     signInWithEmailAndPassword(getAuth(), email.value, password.value)
         .then((data) =>{
-            console.log("Sing in Success!!");
             router.push('/Discover')
         })
         .catch((error)=> {
@@ -45,7 +49,7 @@ const signInWithGoogle = () => {
     signInWithPopup(getAuth(), provider)
     .then((result)=>
     {
-        console.log(result.user);
+        CreateUser(result.user.uid);
         router.push("/Discover")
 
     })
@@ -57,6 +61,24 @@ const signInWithGoogle = () => {
 
 };
 
+const CreateUser = (User) => {
+    
+    const q = query(collection(db, "Librero"), where("User", "==", User));
+
+    getDocs(q).then((querySnapshot) => {
+
+        if (querySnapshot.empty) {
+            
+            addDoc(collection(db, 'Librero'), {
+                Libros: [],
+                User: User,
+            });
+
+
+        }
+    });
+
+}
 
 
 

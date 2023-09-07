@@ -12,7 +12,7 @@ const router = createRouter({
         
         { path: "/Config", component: () => import("../views/Config.vue"), meta: {requiresAuth: true, 
         } },
-        { path: "/ABook", component: () => import("../views/ABook.vue"), meta: {requiresAuth: true, 
+        { name: "Abook", props: true, path: "/ABook/:ID", component: () => import("../views/ABook.vue"), meta: {requiresAuth: true, 
         } },
         { path: "/Profile", component: () => import("../views/Profile.vue"), meta: {requiresAuth: true, 
         } },
