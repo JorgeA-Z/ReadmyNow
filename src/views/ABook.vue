@@ -113,7 +113,7 @@ const popbook = async () => {
 
 
   } else {
-    console.log("Actualiza pero tambien probamos")
+    console.log("Actualiza pero tambien probamos, y actualizamos")
 
     querySnapshot.forEach((docS) => {
 
