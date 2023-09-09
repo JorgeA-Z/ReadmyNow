@@ -3,7 +3,9 @@
 import Nabvar from '../components/Nabvar.vue';
 import Reader from '../components/Reader.vue';
 import { ref, onMounted } from 'vue'
-import {getFirestore, collection, query, where, getDoc, doc} from "firebase/firestore";;
+import { getFirestore, collection, query, where, getDoc, doc, getDocs, setDoc, addDoc, and } from "firebase/firestore";;
+
+import { getAuth } from "firebase/auth";
 
 const props = defineProps(['ID'])
 
@@ -12,6 +14,16 @@ const db = getFirestore();
 const bookData = ref([]);
 const AutorData = ref([]);
 const bookRef = doc(db, "Libro", props.ID);
+const fav = ref(false);
+
+const auth = getAuth();
+
+const User = auth.currentUser.uid;
+
+const q = query(collection(db, "DetalleLibrero"), and(where("Libro", "==", bookRef), where("User", "==", User)));
+
+
+
 onMounted(async () => {
   try {
     const bookDoc = await getDoc(bookRef);
@@ -27,7 +39,7 @@ onMounted(async () => {
       };
 
       const autDoc = await getDoc(bookDoc.get('Autor'));
-      
+
       if (autDoc.exists()) {
         AutorData.value = {
           Apellido: autDoc.get('Apellido'),
@@ -37,6 +49,17 @@ onMounted(async () => {
         };
 
       };
+
+
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach((shefDoc) => {
+          fav.value = shefDoc.get('Favorito')
+        }
+
+        )
+
+      }
 
 
 
@@ -51,48 +74,158 @@ onMounted(async () => {
 
 const reading = ref(false);
 
-const popbook = () => 
-{
-  reading.value = !reading.value;
-}    
 
-const favorites = () =>
-{
-  console.log(bookData.value.ID)
+
+const popbook = async () => {
+
+  reading.value = !reading.value;
+
+
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+
+    const DetalleRef = await addDoc(collection(db, 'DetalleLibrero'), {
+      Favorito: fav.value,
+      Libro: bookRef,
+      Marcadores: [],
+      TiempoIndividual: 0,
+      User: User,
+      Visita: 1,
+    });
+
+    const p = query(collection(db, "Librero"), where("User", "==", User));
+
+    const qs = await getDocs(p);
+
+    qs.forEach((docR) => {
+
+      var libros = docR.get('Libros')
+
+      libros.splice(0, 0, DetalleRef);
+
+      setDoc(doc(db, 'Librero', docR.id), {
+        Libros: libros,
+        User: docR.get('User')
+
+      })
+    });
+
+
+  } else {
+    console.log("Actualiza")
+
+    querySnapshot.forEach((docS) => {
+
+      setDoc(doc(db, 'DetalleLibrero', docS.id), {
+        Favorito: fav.value,
+        Libro: docS.get('Libro'),
+        Marcadores: docS.get('Marcadores'),
+        TiempoIndividual: docS.get('TiempoIndividual'),
+        User: docS.get('User'),
+        Visita: docS.get('Visita') + 1,
+
+      })
+    }
+
+    )
+  }
+
+}
+
+const favorites = async () => {
+
+  fav.value = !fav.value;
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+
+    const DetalleRef = await addDoc(collection(db, 'DetalleLibrero'), {
+      Favorito: fav.value,
+      Libro: bookRef,
+      Marcadores: [],
+      TiempoIndividual: 0,
+      User: User,
+      Visita: 1,
+    });
+
+    const p = query(collection(db, "Librero"), where("User", "==", User));
+
+    const qs = await getDocs(p);
+
+    qs.forEach((docR) => {
+
+      var libros = docR.get('Libros')
+
+      libros.splice(0, 0, DetalleRef);
+
+      setDoc(doc(db, 'Librero', docR.id), {
+        Libros: libros,
+        User: docR.get('User')
+
+      })
+    });
+
+
+  } else {
+    console.log("Actualiza")
+
+    querySnapshot.forEach((docS) => {
+
+      setDoc(doc(db, 'DetalleLibrero', docS.id), {
+        Favorito: fav.value,
+        Libro: docS.get('Libro'),
+        Marcadores: docS.get('Marcadores'),
+        TiempoIndividual: docS.get('TiempoIndividual'),
+        User: docS.get('User'),
+        Visita: docS.get('Visita') + 1,
+
+      })
+    }
+
+    )
+  }
 }
 
 </script>
 
 <template>
-  <div v-if="reading==true">
+  <div v-if="reading == true">
     <Reader :link="bookData.Url"></Reader>
 
   </div>
-  
-  <div v-if="reading==false">
+
+  <div v-if="reading == false">
 
     <Nabvar />
-    
+
     <!-- Foto y datos del libro y su autor -->
     <div class="d-flex acomodo">
-      <img :src="AutorData.Url"
-      class="mt-3 ms-3 me-2 mx-sm-3 img-auto" alt="IMG-AUTOR">
-      
+      <img :src="AutorData.Url" class="mt-3 ms-3 me-2 mx-sm-3 img-auto" alt="IMG-AUTOR">
+
       <div class="mt-3 mt-sm-4">
-        <h5 class="text-capitalize text-break titulo">{{bookData.Nombre}}</h5>
-        
-        <h5 class="text-capitalize text-break autor">{{AutorData.Nombre}} {{AutorData.Apellido}}</h5>
+        <h5 class="text-capitalize text-break titulo">{{ bookData.Nombre }}</h5>
+
+        <h5 class="text-capitalize text-break autor">{{ AutorData.Nombre }} {{ AutorData.Apellido }}</h5>
       </div>
-      
+
     </div>
-    
+
     <!-- Iconos para favoritos y para cerrar -->
     <div class="d-flex icons">
-      
-      <svg @click="favorites" xmlns="http://www.w3.org/2000/svg" width="30" height="34" viewBox="0 0 22 20" fill="none" class="mx-2 equis">
+
+      <svg v-if="fav == false" @click="favorites" xmlns="http://www.w3.org/2000/svg" width="30" height="34"
+        viewBox="0 0 22 20" fill="none" class="mx-2 equis">
         <path
-        d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
-        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
+          stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+
+      <svg v-if="fav == true" @click="favorites" xmlns="http://www.w3.org/2000/svg" width="30" height="34"
+        viewBox="0 0 22 20" fill="none" class="mx-2 equis">
+        <path
+          d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
+          stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
 
       <router-link to="/Discover">
@@ -100,52 +233,51 @@ const favorites = () =>
           <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </router-link>
-      
+
     </div>
-    
+
     <!-- Gradiante que ira encima de la imagen -->
     <div class="gradient"></div>
-    
+
     <!-- Imagen del libro -->
-    <img :src="bookData.Caratula" class="img-fluid imagenbook"
-    alt="img-libro">
-    
+    <img :src="bookData.Caratula" class="img-fluid imagenbook" alt="img-libro">
+
     <div class="container">
-      
+
       <!-- Botones para leer y compartir -->
       <div class="my-4 row justify-content-center">
-        
-        <button  class="me-4 me-sm-5 btn read" @click="popbook">
+
+        <button class="me-4 me-sm-5 btn read" @click="popbook">
           READ
         </button>
-        
+
         <button class="btn share">
           SHARE
         </button>
-        
+
       </div>
-      
+
       <div class="row">
-        
+
         <!-- Info del libro -->
         <div class="col-lg-6">
-          
+
           <h5 class="py-3 ps-2 ps-md-0 text-uppercase about">About The book</h5>
-          
-          <p class="px-2 px-md-0 pe-lg-4 text-break about-text">{{bookData.About}}</p>
-            
-          </div>
-          <div class="col-lg-6">
-            
-            <h5 class="py-3 ps-2 ps-md-0 text-uppercase about">About the autor</h5>
-            
-            <p class="px-2 px-md-0 text-break about-text">{{AutorData.About}}</p>
-              
-            </div>
-          </div>
+
+          <p class="px-2 px-md-0 pe-lg-4 text-break about-text">{{ bookData.About }}</p>
+
+        </div>
+        <div class="col-lg-6">
+
+          <h5 class="py-3 ps-2 ps-md-0 text-uppercase about">About the autor</h5>
+
+          <p class="px-2 px-md-0 text-break about-text">{{ AutorData.About }}</p>
+
         </div>
       </div>
-      </template>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .acomodo {

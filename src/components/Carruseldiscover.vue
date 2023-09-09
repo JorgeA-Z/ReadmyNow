@@ -16,10 +16,6 @@ export default defineComponent({
         Navigation,
     },
     methods: {
-        visita() {
-            // Lógica del método aquí
-            console.log('Se ha hecho clic en el botón');
-        }
     },
     data: () => ({
         Libros: ref([]),
@@ -86,7 +82,7 @@ export default defineComponent({
     <Carousel v-bind="settings" :breakpoints="breakpoints">
         <Slide v-for="(Libro, index) in Libros" :key="index">
             <div v-if="index <= 10" class="m-2 carrusel">
-                <router-link @click="visita" class="link" :to="'/Abook/' + Libro.id">
+                <router-link class="link" :to="'/Abook/' + Libro.id">
 
                     <img :src="Libro.AutorURL" class="img-autor" alt="">
 

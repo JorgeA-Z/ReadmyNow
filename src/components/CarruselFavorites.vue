@@ -56,7 +56,7 @@ export default defineComponent({
 
         const latestQuery = query(collection(db, "Librero"), where("User", "==", this.User));
         const liveLibros = onSnapshot(latestQuery, async (snapshot) => {
-            this.Libros = await Promise.all(snapshot.docs.map(async (Shelf) => {
+            await Promise.all(snapshot.docs.map(async (Shelf) => {
 
                 var books = Shelf.get('Libros');
 
@@ -71,7 +71,8 @@ export default defineComponent({
 
                         const AutorDoc = await getDoc(AutorRef); // Obtener el documento referenciado   
                         this.Cantidad = this.Cantidad + 1;
-                        return {
+
+                        let libro = {
 
                             id: bookDoc.id,
                             Caratula: bookDoc.get('Caratula'),
@@ -83,6 +84,8 @@ export default defineComponent({
                             AutorLastName: AutorDoc.get('Apellido'),
                             AutorURL: AutorDoc.get('Url')
                         }
+
+                        this.Libros.push(libro) 
                     }
                 }
 

@@ -33,11 +33,6 @@ getDocs(q).then((querySnapshot) => {
 
 });
 
-const visita = () => {
-    console.log("Visita")
-
-}
-
 </script>
 
 <template>
@@ -45,7 +40,7 @@ const visita = () => {
         <div class="row">
 
             <div class="col-lg-2 col-md-3 col-6 col-sm" v-for="(b, index) in books" :key="index">
-                <router-link @click="visita" class="link" :to="'/Abook/'+ b.ID">
+                <router-link class="link" :to="'/Abook/'+ b.ID">
                     <img class="img-fluid m-2" :src="b.Caratula" :alt="b.Nombre">
                 </router-link>
             </div>
