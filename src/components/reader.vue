@@ -43,7 +43,7 @@ export default defineComponent({
       // Actualizar la propiedad windowWidth con el nuevo ancho de la ventana
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
-      this.rendition.resize(windowWidth, windowHeight)
+      this.rendition.resize(windowWidth)
 
     }
 
