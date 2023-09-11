@@ -1,60 +1,77 @@
-<script setup>
+<script >
+import { defineComponent, ref, onUnmounted } from 'vue'
 import ePub from 'epubjs';
+export default defineComponent({
+  props:
+  {
+    link: String,
 
-const props = defineProps(['link'])
-var w = 500;
-var h  = 650;
+  },
+  methods:
+  {
+    next() {
 
-var book = ePub(props.link);
-var rendition = book.renderTo("area", { spread:"none", allowScriptedContent: true, width: w, height: h});
-var displayed = rendition.display();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
-
-let p;
-
-const next = () => {
-
-  rendition.next();
-
-};
-
-
-const prev = () => {
-  rendition.prev();
-};
-const marcador = () => 
-{
-  p = rendition.location.start.cfi
-  console.log(p)
-}
+      console.log()
+      
+      if(this.rendition.location.atEnd != true)
+      {
+        this.rendition.next();
+        this.pageNumber = this.pageNumber + 1;
+      }
 
 
-/*
-const ret = () => 
-{
-  rendition.display(p);
+    },
+    prev() {
 
-}
-function handleResize() {
-  // Obtener el ancho y alto actual de la ventana
-  var windowWidth = window.innerWidth;
-  var windowHeight = window.innerHeight;
-  
-  // Realizar ajustes según sea necesario
-  if (windowWidth < 1440) {
-    // Si el ancho de la ventana es menor que 768 píxeles (por ejemplo, en dispositivos móviles)
-    // Realizar ajustes específicos para pantallas pequeñas
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); // 'smooth' proporciona un desplazamiento suave
+      
+      if(this.rendition.location.atStart != true)
+      {
+        this.rendition.prev();
+        this.pageNumber = this.pageNumber - 1;
+      }
+
+    },
+    marcador() {
+      let p;
+      p = this.rendition.location.start.cfi
+      console.log(p)
+    },
+    handleResize() {
+      // Actualizar la propiedad windowWidth con el nuevo ancho de la ventana
+      var windowWidth = window.innerWidth;
+      var windowHeight = window.innerHeight;
+      this.rendition.resize(windowWidth, windowHeight)
+
+    }
+
+  },
+  data: () => ({
+    w: ref(window.innerWidth),
+    h: ref(window.innerHeight),
+    pageNumber: ref(0),
+    rendition: ref(),
+    book: ref(),
+
+  }),
+  created() {
+    // Agregar un event listener para el evento de redimensionamiento de la ventana
+    window.addEventListener('resize', this.handleResize);
+
+  },
+  beforeDestroy() {
+    // Asegurarse de quitar el event listener cuando el componente se destruye para evitar fugas de memoria
+    window.removeEventListener('resize', this.handleResize);
+  },
+  mounted() {
+    this.book = ePub(this.link);
+    this.rendition = this.book.renderTo("area", { spread: "none", allowScriptedContent: true, width: this.w, height: this.h });
+    var displayed = this.rendition.display();
     
   }
-}
-window.addEventListener("resize", function () {
-
-});
-*/
-
-
-
-
+})
 </script>
 
 <template>
@@ -75,7 +92,8 @@ window.addEventListener("resize", function () {
         <h5 class="readme">ReadMeNow!</h5>
 
         <!-- Icono para marcar libro -->
-        <svg @click="marcador" xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 40 35" fill="none" class="marcador">
+        <svg @click="marcador" xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 40 35" fill="none"
+          class="marcador">
           <path
             d="M6.66663 11.375C6.66663 8.92477 6.66663 7.69966 7.21159 6.76379C7.69096 5.94058 8.45586 5.27129 9.39667 4.85185C10.4662 4.375 11.8664 4.375 14.6666 4.375H25.3333C28.1336 4.375 29.5337 4.375 30.6032 4.85185C31.5441 5.27129 32.309 5.94058 32.7883 6.76379C33.3333 7.69966 33.3333 8.92477 33.3333 11.375V30.625L28.75 27.7083L24.5833 30.625L20 27.7083L15.4166 30.625L11.25 27.7083L6.66663 30.625V11.375Z"
             stroke="#7A60A9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -84,29 +102,64 @@ window.addEventListener("resize", function () {
     </nav>
 
   </header>
-
   <!-- Lector Epub -->
+  <div class="lector">
 
-  <div class="container mt-6 lector">
-    <div class="row justify-content-center">
-      <div class="col-md-5">
-        <div class="card">
-          <button @click="prev">
+    <div class="container">
+      <div class="row align-items-end">
+        <div class="col">
+        </div>
+        <div class="col text-center">
+          <button id="prev" @click="prev()" class="readme">
             «
           </button>
-          <div class="card-body">
-            <div id="area"></div>
-          </div>
-          <button @click="next">
-            »
-          </button>
+        </div>
+        <div class="col">
+
         </div>
       </div>
     </div>
+
+
+
+    <div id="area"></div>
+
+
+    <div class="container">
+      <div class="row align-items-end">
+        <div class="col">
+          <small class="muted readme">
+            <span>
+              {{ pageNumber }}
+
+            </span>
+          </small>
+        </div>
+        <div class="col text-center">
+          <button id="next" @click="next()" class="readme ">
+            »
+          </button>
+        </div>
+        <div class="col">
+
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </template>
 
 <style scoped>
+button {
+  display: inline;
+  padding: 0.5rem 1rem;
+  margin: 0 auto;
+  text-decoration: none;
+  border: none;
+  background-color: white;
+}
+
 .return {
   cursor: pointer;
 }
@@ -116,7 +169,7 @@ window.addEventListener("resize", function () {
 }
 
 .lector {
-  margin-top: 60px;
+  margin-top: 65px;
 }
 
 .header-read {
@@ -136,7 +189,7 @@ window.addEventListener("resize", function () {
 }
 
 .readme {
-  display: flex;
+  display: inline-block;
   align-items: center;
   color: #7A60A9;
   font-family: 'Comfortaa', cursive;
@@ -145,5 +198,7 @@ window.addEventListener("resize", function () {
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.375px;
+  align-content: center;
+  text-align: center;
 }
 </style>

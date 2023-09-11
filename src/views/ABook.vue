@@ -178,7 +178,7 @@ const favorites = async () => {
         Marcadores: docS.get('Marcadores'),
         TiempoIndividual: docS.get('TiempoIndividual'),
         User: docS.get('User'),
-        Visita: docS.get('Visita') + 1,
+        Visita: docS.get('Visita'),
 
       })
     }
