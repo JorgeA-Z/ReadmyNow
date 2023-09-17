@@ -158,7 +158,8 @@ button {
   margin: 0 auto;
   text-decoration: none;
   border: none;
-  background-color: white;
+  background-color:white;
+  width: 500px;
 }
 
 .return {

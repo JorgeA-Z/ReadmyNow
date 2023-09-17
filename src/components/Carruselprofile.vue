@@ -57,6 +57,7 @@ export default defineComponent({
         const latestQuery = query(collection(db, 'DetalleLibrero'), where('User', '==', this.User) );
         const unsubscribe = onSnapshot(latestQuery, async (snapshot) => {
             this.Cantidad = 0;
+            this.Libros = [];
             for (const Shelf of snapshot.docs) {
 
                 const bookDoc = await getDoc(Shelf.get('Libro'));
