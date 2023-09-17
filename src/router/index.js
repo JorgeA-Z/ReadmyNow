@@ -16,11 +16,9 @@ const router = createRouter({
         } },
         { path: "/Profile", component: () => import("../views/Profile.vue"), meta: {requiresAuth: true, 
         } },
-        { path: "/Results", component: () => import("../views/Results.vue"), meta: {requiresAuth: true, 
-        } },
         { path: "/Search", component: () => import("../views/Search.vue"), meta: {requiresAuth: true, 
         } },
-        { path: "/Discover", component: () => import("../views/Discover.vue"), meta: {requiresAuth: true, 
+        { path: "/Discover", component: () => import("../views/Discover.vue"), meta: {requiresAuth: true,
         } 
         },
 

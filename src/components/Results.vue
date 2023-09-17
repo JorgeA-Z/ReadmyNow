@@ -8,7 +8,7 @@ const db = getFirestore();
 export default defineComponent({
     props:
     {
-        User: String,
+      books: Array,
 
     },
     methods:
@@ -17,27 +17,8 @@ export default defineComponent({
 
     },
     data: () => ({
-        books: ref([]),
 
     }),
-    mounted() {
-        const q = query(collection(db, "Libro"));
-        onSnapshot(q, async (snapshot) => {
-            snapshot.forEach((doc) => {
-                var book =
-                {
-                    ID: doc.id,
-                    Nombre: doc.get('Nombre'),
-                    Caratula: doc.get('Caratula'),
-                    Libro: doc.get('Url'),
-                    Autor: doc.get('Autor'),
-
-                }
-                this.books.push(book);
-            })
-
-        })
-    },
 })
 
 //Ordenar libros deacuerdo a parámetros
@@ -54,14 +35,6 @@ export default defineComponent({
                 </router-link>
             </div>
         </div>
-    </div>
-
-    <div class="m-4 row justify-content-center">
-
-        <button type="submit" class="btn general">
-            SEE MORE
-        </button>
-
     </div>
 </template>
 

@@ -1,7 +1,7 @@
 <script>
 import { defineComponent, ref, onUnmounted } from 'vue'
 import { Carousel, Navigation, Slide } from 'vue3-carousel'
-import { getFirestore, onSnapshot, collection, doc, deleteDoc, query, getDoc, where } from 'firebase/firestore';
+import { getFirestore, onSnapshot, collection, doc, deleteDoc, query, getDoc, where, and } from 'firebase/firestore';
 
 import 'vue3-carousel/dist/carousel.css'
 
@@ -54,56 +54,51 @@ export default defineComponent({
     }),
     mounted() {
 
-        const latestQuery = query(collection(db, "Librero"), where("User", "==", this.User));
-        const liveLibros = onSnapshot(latestQuery, async (snapshot) => {
-            await Promise.all(snapshot.docs.map(async (Shelf) => {
+        const latestQuery = query(collection(db, 'DetalleLibrero'), and(where('User', '==', this.User), where('Favorito', '==', true),));
+        const unsubscribe = onSnapshot(latestQuery, async (snapshot) => {
+            this.Cantidad = 0;
+            for (const Shelf of snapshot.docs) {
 
-                var books = Shelf.get('Libros');
+                const bookDoc = await getDoc(Shelf.get('Libro'));
+                
+                const AutorRef = bookDoc.get('Autor');
 
-                for (var book of books) {
+                const AutorDoc = await getDoc(AutorRef);
 
-                    const Detalle = await getDoc(book);
-                    if (Detalle.get('Favorito')) {
 
-                        const bookDoc = await getDoc(Detalle.get("Libro"));
+                this.Cantidad += 1;
 
-                        const AutorRef = bookDoc.get('Autor'); // Supongo que 'Genero' es una referencia a otro documento
+                var libro = {
+                    id: bookDoc.id,
+                    Caratula: bookDoc.get('Caratula'),
+                    Genero: bookDoc.get('Genero'),
+                    Nombre: bookDoc.get('Nombre'),
+                    Subgenero: bookDoc.get('Subgenero'),
+                    Url: bookDoc.get('Url'),
+                    AutorName: AutorDoc.get('Nombre'),
+                    AutorLastName: AutorDoc.get('Apellido'),
+                    AutorURL: AutorDoc.get('Url'),
+                };
+                
+                this.Libros.push(libro);
 
-                        const AutorDoc = await getDoc(AutorRef); // Obtener el documento referenciado   
-                        this.Cantidad = this.Cantidad + 1;
+            }
 
-                        let libro = {
-
-                            id: bookDoc.id,
-                            Caratula: bookDoc.get('Caratula'),
-                            Genero: bookDoc.get('Genero'),
-                            Nombre: bookDoc.get('Nombre'),
-                            Subgenero: bookDoc.get('Subgenero'),
-                            Url: bookDoc.get('Url'),
-                            AutorName: AutorDoc.get('Nombre'),
-                            AutorLastName: AutorDoc.get('Apellido'),
-                            AutorURL: AutorDoc.get('Url')
-                        }
-
-                        this.Libros.push(libro) 
-                    }
-                }
-
-            }));
         });
-        onUnmounted(liveLibros)
-    }
+
+        onUnmounted(unsubscribe);
+    },
 })
 </script>
 
 <template>
-    <div v-if="Cantidad == 0" class="m-2 carrusel">
+    <div v-if="Cantidad === 0" class="m-2 carrusel">
         <small class="text-capitalize titulo2">Try adding some books</small>
     </div>
 
-    <Carousel v-if="Cantidad > 0" v-bind="settings" :breakpoints="breakpoints">
-        <Slide  v-for="(Libro, index) in Libros" :key="index">
-            <div  class="m-2 carrusel">
+    <Carousel v-bind="settings" :breakpoints="breakpoints">
+        <Slide v-for="(Libro, index) in Libros" :key="index">
+            <div class="m-2 carrusel">
 
                 <router-link class="link" :to="'/Abook/' + Libro.id">
 
@@ -146,6 +141,7 @@ export default defineComponent({
     line-height: normal;
 
 }
+
 .titulo2 {
     color: #D6C8E1;
     font-family: 'Comfortaa', cursive;

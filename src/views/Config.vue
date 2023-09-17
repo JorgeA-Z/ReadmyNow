@@ -15,8 +15,8 @@ const name = auth.currentUser.displayName;
 </script>
 
 <template>
-  <Nabvar />
 
+  <Nabvar/>
   <div class="container">
 
     <div class="mt-4 mb-3 d-flex setting">

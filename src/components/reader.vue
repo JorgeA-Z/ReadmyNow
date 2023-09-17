@@ -14,9 +14,8 @@ export default defineComponent({
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       console.log()
-      
-      if(this.rendition.location.atEnd != true)
-      {
+
+      if (this.rendition.location.atEnd != true) {
         this.rendition.next();
         this.pageNumber = this.pageNumber + 1;
       }
@@ -26,9 +25,8 @@ export default defineComponent({
     prev() {
 
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); // 'smooth' proporciona un desplazamiento suave
-      
-      if(this.rendition.location.atStart != true)
-      {
+
+      if (this.rendition.location.atStart != true) {
         this.rendition.prev();
         this.pageNumber = this.pageNumber - 1;
       }
@@ -67,9 +65,12 @@ export default defineComponent({
   },
   mounted() {
     this.book = ePub(this.link);
-    this.rendition = this.book.renderTo("area", { spread: "none", allowScriptedContent: true, width: this.w, height: this.h });
+    this.rendition = this.book.renderTo("area", {
+      manager: "continuous",
+      flow: "paginated", spread: "none", allowScriptedContent: true, width: this.w, height: this.h
+    });
     var displayed = this.rendition.display();
-    
+
   }
 })
 </script>

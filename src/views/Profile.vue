@@ -1,73 +1,92 @@
-<script setup>
+<script >
 import Carruselprofile from '../components/Carruselprofile.vue';
 import Nabvar from '../components/Nabvar.vue';
 import CarruselFavorites from '../components/CarruselFavorites.vue';
-import {onMounted, ref} from "vue";
-import {getAuth, onAuthStateChanged, signOut} from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "vue-router";
-
-const router = useRouter();
-const isLoggedIn = ref(false);
+import Loading from '../components/Loading.vue';
+import { defineComponent, ref, onUnmounted } from 'vue'
 
 const auth = getAuth();
+export default defineComponent({
+  props:
+  {
 
-const image = auth.currentUser.photoURL;
-const name = auth.currentUser.displayName;
-const email = auth.currentUser.email;
+  },
+  components: {
+    Carruselprofile,
+    CarruselFavorites,
+    Nabvar,
+    Loading,
+  },
+  methods:
+  {
+    handleSingOut() {
+      signOut(auth) // Asegúrate de pasar el objeto 'auth' de Firebase como argumento
+        .then(() => {
+          this.$router.push('/');
+        })
+        .catch((error) => {
+          console.error('Error al cerrar sesión:', error);
+        });
+      }
+    },
+    data: () => ({
+      isLoggedIn: ref(false),
+      isLoading: ref(true),
 
-const ID = auth.currentUser.uid;
+      image: auth.currentUser.photoURL,
+      name: auth.currentUser.displayName,
+      email: auth.currentUser.email,
+      ID: auth.currentUser.uid,
 
+    }),
+    mounted() {
+      setTimeout(() => {
+        this.isLoading = false; // Cambia el estado de isLoading cuando la carga esté completa
+      }, 1500);
+      
+      onAuthStateChanged(auth, (user) => {
 
+        if (user) {
+          this.isLoggedIn = true;
 
-onMounted(() =>  {
-  onAuthStateChanged(auth, (user) => {
-    
-    if(user)
-    {
-      isLoggedIn.value = true;
+        } else {
+          this.isLoggedIn = false;
+        }
+      });
 
-    }else
-    {
-      isLoggedIn.value = false;
-    }
-  });
-});
-
-const handleSingOut = () =>
-{
-  signOut(auth).then(()=>{
-    router.push("/");
-  });
-};
-
+    },
+  })
 </script>
 
 <template>
-  <Nabvar />
-
+  <Loading v-if="isLoading"></Loading>
+  <Nabvar/>
+  
   <div class="container">
     <div class="row">
       <div class="col-lg-5">
-        
+
         <div class="row justify-content-center align-self-center">
 
           <img :src=image class="m-4 rounded-circle img-fluid img-user" alt="">
 
 
 
-          <h1 class="mt-4 text-center text-capitalize text-user">{{name}}</h1>
+          <h1 class="mt-4 text-center text-capitalize text-user">{{ name }}</h1>
 
-          <h2 class="mt-4 text-center text-location">{{email}}</h2>
-          
+          <h2 class="mt-4 text-center text-location">{{ email }}</h2>
+
           <router-link class="mt-4 mx-2 config" to="/Config">
-              <div class="btn text">
+            <div class="btn text">
               CONFIG
-              </div>
+            </div>
           </router-link>
-            
-          
 
-          <button class="mt-4 mx-2 btn log-out"  @click="handleSingOut">
+
+
+          <button class="mt-4 mx-2 btn log-out" @click="handleSingOut">
             LOG OUT
           </button>
 
@@ -85,7 +104,7 @@ const handleSingOut = () =>
         <div class="m-3 mt-sm-5 mt-lg-4">
           <h4 class="text-left text-uppercase favorities">Favorites</h4>
           <CarruselFavorites :User="ID"></CarruselFavorites>
-          
+
 
         </div>
 
@@ -153,10 +172,10 @@ const handleSingOut = () =>
   text-transform: uppercase;
 }
 
-.text
-{
+.text {
   color: #FFF;
 }
+
 .config:focus {
   border-color: rgb(122, 96, 169);
   box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169, 0.6);

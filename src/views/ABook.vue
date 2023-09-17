@@ -2,12 +2,16 @@
 
 import Nabvar from '../components/Nabvar.vue';
 import Reader from '../components/Reader.vue';
+import Loading from '../components/Loading.vue';
+
 import { ref, onMounted } from 'vue'
 import { getFirestore, collection, query, where, getDoc, doc, getDocs, setDoc, addDoc, and } from "firebase/firestore";;
 
 import { getAuth } from "firebase/auth";
 
+const isLoading = ref(true);
 const props = defineProps(['ID'])
+
 
 const db = getFirestore();
 
@@ -21,6 +25,10 @@ const auth = getAuth();
 const User = auth.currentUser.uid;
 
 const q = query(collection(db, "DetalleLibrero"), and(where("Libro", "==", bookRef), where("User", "==", User)));
+
+setTimeout(() => {
+  isLoading.value = false; // Cambia el estado de isLoading cuando la carga esté completa
+}, 500);
 
 
 
@@ -190,6 +198,9 @@ const favorites = async () => {
 </script>
 
 <template>
+  <Nabvar />
+
+  <Loading v-if="isLoading"></Loading>
   <div v-if="reading == true">
     <Reader :link="bookData.Url"></Reader>
 
@@ -197,7 +208,6 @@ const favorites = async () => {
 
   <div v-if="reading == false">
 
-    <Nabvar />
 
     <!-- Foto y datos del libro y su autor -->
     <div class="d-flex acomodo">
@@ -433,3 +443,4 @@ const favorites = async () => {
 
 }
 </style>
+

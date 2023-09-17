@@ -1,36 +1,72 @@
-<script setup>
-import Carruseldiscover from '../components/Carruseldiscover.vue';
-import Galerydiscover from '../components/Galerydiscover.vue';
+<script>
 import Nabvar from '../components/Nabvar.vue';
-</script>
+import { getFirestore, onSnapshot, collection, doc, query, getDoc, where, or } from 'firebase/firestore';
+import Results from '../components/Results.vue';
+const db = getFirestore();
+export default {
+
+  data() {
+    return {
+      searchQuery: '',
+      searchResults: []
+    };
+  },
+  components:
+  {
+    Nabvar,
+    Results,
+
+  },
+  methods: {
+    search() {
+
+      // Realiza la búsqueda en Firebase Firestore aquí
+      this.searchResults = [];
+
+      const Query = this.searchQuery.trim()
+      
+      const latestQuery = query(collection(db, 'Libro'), or(where('Nombre', '==', Query), where('Genero', '==', Query), where('Subgenero', '==', Query)));
+      const unsubscribe = onSnapshot(latestQuery, async (snapshot) => {
+        snapshot.forEach((doc) => {
+          var book =
+          {
+            ID: doc.id,
+            Nombre: doc.get('Nombre'),
+            Caratula: doc.get('Caratula'),
+            Libro: doc.get('Url'),
+            Autor: doc.get('Autor'),
+
+          }
+          console.log(doc)
+          this.searchResults.push(book)
+        });
+
+
+      })
+
+    }
+  }
+};
+
+</script >
+
 
 <template>
   <Nabvar />
-
-
 
   <div class="m-4 row justify-content-center">
 
     <h1 class="text-center search">Search</h1>
 
-    <input type="text" class="form-control mt-2 busqueda" required placeholder="Search all books">
+    <input v-model="searchQuery" @input="search" type="text" class="form-control mt-2 busqueda" required
+      placeholder="Search all books">
 
   </div>
 
   <div class="m-3">
 
     <span class="text">ALL RESULTS</span>
-
-    <Galerydiscover/>
-
-  </div>
-
-  <div class="m-3">
-
-    <span class="text">RECOMENDATIONS</span>
-
-    <Carruseldiscover/>
-
+    <Results :books="searchResults" ></Results>
   </div>
 </template>
 
