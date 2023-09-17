@@ -57,11 +57,15 @@ export default defineComponent({
   created() {
     // Agregar un event listener para el evento de redimensionamiento de la ventana
     window.addEventListener('resize', this.handleResize);
+    window.addEventListener("swipeleft", this.next);
+    window.addEventListener("swiperight", this.prev);
 
   },
   beforeDestroy() {
     // Asegurarse de quitar el event listener cuando el componente se destruye para evitar fugas de memoria
     window.removeEventListener('resize', this.handleResize);
+    window.addEventListener("swipeleft", this.next);
+    window.addEventListener("swiperight", this.prev);
   },
   mounted() {
     this.book = ePub(this.link);
