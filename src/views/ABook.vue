@@ -1,199 +1,198 @@
-<script setup>
+<script>
 
 import Nabvar from '../components/Nabvar.vue';
 import Reader from '../components/Reader.vue';
 import Loading from '../components/Loading.vue';
 
-import { ref, onMounted } from 'vue'
+import { defineComponent, ref } from 'vue'
+
 import { getFirestore, collection, query, where, getDoc, doc, getDocs, setDoc, addDoc, and } from "firebase/firestore";;
 
 import { getAuth } from "firebase/auth";
 
-const isLoading = ref(true);
-const props = defineProps(['ID'])
-
-
 const db = getFirestore();
-
-const bookData = ref([]);
-const AutorData = ref([]);
-const bookRef = doc(db, "Libro", props.ID);
-const fav = ref(false);
 
 const auth = getAuth();
 
-const User = auth.currentUser.uid;
+export default defineComponent({
+  props:
+  {
+    ID: String,
 
-const q = query(collection(db, "DetalleLibrero"), and(where("Libro", "==", bookRef), where("User", "==", User)));
+  },
+  components:
+  {
+    Reader,
+    Loading,
+    Nabvar
 
-setTimeout(() => {
-  isLoading.value = false; // Cambia el estado de isLoading cuando la carga esté completa
-}, 500);
+  },
+  methods:
+  {
+    popbook() {
+      this.reading = !this.reading;
+    },
 
-
-
-onMounted(async () => {
-  try {
-    const bookDoc = await getDoc(bookRef);
-    if (bookDoc.exists()) {
-      bookData.value = {
-        ID: bookDoc.id,
-        Caratula: bookDoc.get('Caratula'),
-        Genero: bookDoc.get('Genero'),
-        Nombre: bookDoc.get('Nombre'),
-        Subgenero: bookDoc.get('Subgenero'),
-        Url: bookDoc.get('Url'),
-        About: bookDoc.get('About')
-      };
-
-      const autDoc = await getDoc(bookDoc.get('Autor'));
-
-      if (autDoc.exists()) {
-        AutorData.value = {
-          Apellido: autDoc.get('Apellido'),
-          Nombre: autDoc.get('Nombre'),
-          Url: autDoc.get('Url'),
-          About: autDoc.get('About')
-        };
-
-      };
+    async crea(bookRef) {
+      const DetalleRef = await addDoc(collection(db, 'DetalleLibrero'), {
+        Favorito: this.fav,
+        Libro: bookRef,
+        Marcadores: [],
+        Page: ["", 0],
+        TiempoIndividual: 0,
+        User: this.User,
+        Visita: 1,
+      });
 
 
+      const p = query(collection(db, "Librero"), where("User", "==", this.User));
+
+      const qs = await getDocs(p);
+
+      qs.forEach((docR) => {
+
+        var libros = docR.get('Libros')
+
+        libros.splice(0, 0, DetalleRef);
+
+        setDoc(doc(db, 'Librero', docR.id), {
+          Libros: libros,
+          User: docR.get('User')
+
+        })
+      });
+
+    },
+    async actualiza(querySnapshot) {
+      querySnapshot.forEach((docS) => {
+        setDoc(doc(db, 'DetalleLibrero', docS.id), {
+          Favorito: this.fav,
+          Libro: docS.get('Libro'),
+          Marcadores: docS.get('Marcadores'),
+          Page: docS.get('Page'),
+          TiempoIndividual: docS.get('TiempoIndividual'),
+          User: docS.get('User'),
+          Visita: docS.get('Visita') + 1,
+        })
+        this.lp = docS.get('Page');
+      })
+
+    },
+
+    async favorites() {
+      this.fav = !this.fav;
+      const bookRef = doc(db, "Libro", this.ID);
+      const q = query(collection(db, "DetalleLibrero"), and(where("Libro", "==", bookRef), where("User", "==", this.User)));
       const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        querySnapshot.forEach((shefDoc) => {
-          fav.value = shefDoc.get('Favorito')
-        }
+      querySnapshot.forEach((docS) => {
+        setDoc(doc(db, 'DetalleLibrero', docS.id), {
+          Favorito: this.fav,
+          Libro: docS.get('Libro'),
+          Marcadores: docS.get('Marcadores'),
+          Page: docS.get('Page'),
+          TiempoIndividual: docS.get('TiempoIndividual'),
+          User: docS.get('User'),
+          Visita: docS.get('Visita'),
+        })
+      })
 
-        )
+      this.updateLike(bookRef)
 
-      }
+    },
+    async updateLike(bookRef) {
 
 
 
+      const q = query(collection(db, "DetalleLibrero"), and(where("Libro", "==", bookRef), where("Favorito", "==", true)));
+      const querySnapshot = await getDocs(q);
+      var like = querySnapshot.size;
+
+
+      const bookDoc = await getDoc(bookRef);
+
+      setDoc(doc(db, 'Libro', bookDoc.id), {
+          About: bookDoc.get("About"),
+          Autor: bookDoc.get("Autor"),
+          Caratula: bookDoc.get("Caratula"),
+          Genero: bookDoc.get("Genero"),
+          Likes: like,
+          Nombre: bookDoc.get("Nombre"),
+          Subgenero: bookDoc.get("Subgenero"),
+          TiempoGlobal: bookDoc.get("TiempoGlobal"),
+          Url: bookDoc.get("Url"),
+        })
+
+    }
+
+  },
+  data: () => ({
+    isLoading: ref(true),
+    bookData: ref([]),
+    AutorData: ref([]),
+    fav: ref(false),
+    User: auth.currentUser.uid,
+    reading: ref(false),
+    lp: ref(["", 0]),
+
+
+  }),
+  async created() {
+    const bookRef = doc(db, "Libro", this.ID);
+    const q = query(collection(db, "DetalleLibrero"), and(where("Libro", "==", bookRef), where("User", "==", this.User)));
+    const bookDoc = await getDoc(bookRef);
+
+    this.bookData = {
+      ID: bookDoc.id,
+      Caratula: bookDoc.get('Caratula'),
+      Genero: bookDoc.get('Genero'),
+      Nombre: bookDoc.get('Nombre'),
+      Subgenero: bookDoc.get('Subgenero'),
+      Url: bookDoc.get('Url'),
+      About: bookDoc.get('About')
+
+
+    }
+
+    const autDoc = await getDoc(bookDoc.get('Autor'));
+
+    this.AutorData = {
+      Apellido: autDoc.get('Apellido'),
+      Nombre: autDoc.get('Nombre'),
+      Url: autDoc.get('Url'),
+      About: autDoc.get('About')
+    };
+
+
+
+  },
+  async mounted() {
+
+    const bookRef = doc(db, "Libro", this.ID);
+    const q = query(collection(db, "DetalleLibrero"), and(where("Libro", "==", bookRef), where("User", "==", this.User)));
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      this.crea(bookRef)
+      
+      this.updateLike(bookRef)
 
     } else {
-      console.log('El documento no existe.');
+
+      querySnapshot.forEach((shefDoc) => {
+        this.fav = shefDoc.get('Favorito')
+      })
+
+      this.actualiza(querySnapshot)
+      this.updateLike(bookRef)
     }
-  } catch (error) {
-    console.error('Error al obtener el documento:', error);
-  }
-});
-
-const reading = ref(false);
-
+    setTimeout(() => {
+      this.isLoading = false; // Cambia el estado de isLoading cuando la carga esté completa
+    }, 1500);
+  },
+})
 
 
-const popbook = async () => {
-
-  reading.value = !reading.value;
-
-
-  const querySnapshot = await getDocs(q);
-
-  if (querySnapshot.empty) {
-
-    const DetalleRef = await addDoc(collection(db, 'DetalleLibrero'), {
-      Favorito: fav.value,
-      Libro: bookRef,
-      Marcadores: [],
-      TiempoIndividual: 0,
-      User: User,
-      Visita: 1,
-    });
-
-    const p = query(collection(db, "Librero"), where("User", "==", User));
-
-    const qs = await getDocs(p);
-
-    qs.forEach((docR) => {
-
-      var libros = docR.get('Libros')
-
-      libros.splice(0, 0, DetalleRef);
-
-      setDoc(doc(db, 'Librero', docR.id), {
-        Libros: libros,
-        User: docR.get('User')
-
-      })
-    });
-
-
-  } else {
-    console.log("Actualiza pero tambien probamos, y actualizamos")
-
-    querySnapshot.forEach((docS) => {
-
-      setDoc(doc(db, 'DetalleLibrero', docS.id), {
-        Favorito: fav.value,
-        Libro: docS.get('Libro'),
-        Marcadores: docS.get('Marcadores'),
-        TiempoIndividual: docS.get('TiempoIndividual'),
-        User: docS.get('User'),
-        Visita: docS.get('Visita') + 1,
-
-      })
-    }
-
-    )
-  }
-
-}
-
-const favorites = async () => {
-
-  fav.value = !fav.value;
-  const querySnapshot = await getDocs(q);
-
-  if (querySnapshot.empty) {
-
-    const DetalleRef = await addDoc(collection(db, 'DetalleLibrero'), {
-      Favorito: fav.value,
-      Libro: bookRef,
-      Marcadores: [],
-      TiempoIndividual: 0,
-      User: User,
-      Visita: 1,
-    });
-
-    const p = query(collection(db, "Librero"), where("User", "==", User));
-
-    const qs = await getDocs(p);
-
-    qs.forEach((docR) => {
-
-      var libros = docR.get('Libros')
-
-      libros.splice(0, 0, DetalleRef);
-
-      setDoc(doc(db, 'Librero', docR.id), {
-        Libros: libros,
-        User: docR.get('User')
-
-      })
-    });
-
-
-  } else {
-    console.log("Actualiza")
-
-    querySnapshot.forEach((docS) => {
-
-      setDoc(doc(db, 'DetalleLibrero', docS.id), {
-        Favorito: fav.value,
-        Libro: docS.get('Libro'),
-        Marcadores: docS.get('Marcadores'),
-        TiempoIndividual: docS.get('TiempoIndividual'),
-        User: docS.get('User'),
-        Visita: docS.get('Visita'),
-
-      })
-    }
-
-    )
-  }
-}
 
 </script>
 
@@ -202,7 +201,7 @@ const favorites = async () => {
 
   <Loading v-if="isLoading"></Loading>
   <div v-if="reading == true">
-    <Reader :link="bookData.Url"></Reader>
+    <Reader :link="bookData.Url" :id="ID" :user="User" :lastPage="lp"></Reader>
 
   </div>
 
@@ -271,11 +270,8 @@ const favorites = async () => {
 
         <!-- Info del libro -->
         <div class="col-lg-6">
-
           <h5 class="py-3 ps-2 ps-md-0 text-uppercase about">About The book</h5>
-
           <p class="px-2 px-md-0 pe-lg-4 text-break about-text">{{ bookData.About }}</p>
-
         </div>
         <div class="col-lg-6">
 

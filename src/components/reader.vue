@@ -1,26 +1,82 @@
 <script >
 import { defineComponent, ref, onUnmounted } from 'vue'
 import ePub from 'epubjs';
+import { getFirestore, collection, query, where, getDoc, doc, getDocs, setDoc, addDoc, and } from "firebase/firestore";;
+
+const db = getFirestore();
+
 export default defineComponent({
   props:
   {
     link: String,
+    user: String,
+    id: String,
+    lastPage: Array,
 
   },
   methods:
   {
+    async actualiza() {
+      const bookRef = doc(db, "Libro", this.id);
+      const q = query(collection(db, "DetalleLibrero"), and(where("Libro", "==", bookRef), where("User", "==", this.user)));
+      const querySnapshot = await getDocs(q);
+
+      const bookDoc = await getDoc(bookRef);
+
+      let p;
+
+      p = this.rendition.location.start.cfi
+
+      var page = [p, this.pageNumber]
+
+
+      querySnapshot.forEach((docS) => {
+        setDoc(doc(db, 'DetalleLibrero', docS.id), {
+
+          Favorito: docS.get('Favorito'),
+
+          Libro: docS.get('Libro'),
+
+          Marcadores: docS.get('Marcadores'),
+
+          Page: page,
+
+          TiempoIndividual: docS.get('TiempoIndividual') + this.time(),
+
+          User: docS.get('User'),
+
+          Visita: docS.get('Visita'),
+        })
+
+        setDoc(doc(db, 'Libro', bookDoc.id), {
+
+          About: bookDoc.get("About"),
+          Autor: bookDoc.get("Autor"),
+          Caratula: bookDoc.get("Caratula"),
+          Genero: bookDoc.get("Genero"),
+
+          Likes: bookDoc.get("Likes"),
+
+          Nombre: bookDoc.get("Nombre"),
+          Subgenero: bookDoc.get("Subgenero"),
+          TiempoGlobal: bookDoc.get("TiempoGlobal") + this.time(),
+          Url: bookDoc.get("Url"),
+
+        })
+
+      })
+
+    },
     next() {
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
-
       console.log()
 
       if (this.rendition.location.atEnd != true) {
         this.rendition.next();
         this.pageNumber = this.pageNumber + 1;
+        this.actualiza()
       }
-
-
     },
     prev() {
 
@@ -29,13 +85,14 @@ export default defineComponent({
       if (this.rendition.location.atStart != true) {
         this.rendition.prev();
         this.pageNumber = this.pageNumber - 1;
+        this.actualiza()
       }
 
     },
     marcador() {
       let p;
       p = this.rendition.location.start.cfi
-      console.log(p)
+      this.marcadores.push(p)
     },
     handleResize() {
       // Actualizar la propiedad windowWidth con el nuevo ancho de la ventana
@@ -43,7 +100,18 @@ export default defineComponent({
       var windowHeight = window.innerHeight;
       this.rendition.resize(windowWidth)
 
-    }
+    },
+    time() {
+      const date = Date();
+
+      var horaSalida = new Date();
+
+      // Calcula la diferencia en segundos
+      var tiempoEnLaPagina = (horaSalida - this.horaEntrada) / 1000;
+
+      return tiempoEnLaPagina
+
+    },
 
   },
   data: () => ({
@@ -52,16 +120,21 @@ export default defineComponent({
     pageNumber: ref(0),
     rendition: ref(),
     book: ref(),
+    horaEntrada: ref(),
+    marcadores: ref([]),
 
   }),
   created() {
     // Agregar un event listener para el evento de redimensionamiento de la ventana
     window.addEventListener('resize', this.handleResize);
+    this.horaEntrada = new Date();
+
 
   },
   beforeDestroy() {
     // Asegurarse de quitar el event listener cuando el componente se destruye para evitar fugas de memoria
     window.removeEventListener('resize', this.handleResize);
+
   },
   mounted() {
     this.book = ePub(this.link);
@@ -69,7 +142,17 @@ export default defineComponent({
       manager: "continuous",
       flow: "paginated", spread: "none", allowScriptedContent: true, width: this.w, height: this.h
     });
-    var displayed = this.rendition.display();
+    if (this.lastPage[1] != 0) {
+      var displayed = this.rendition.display(this.lastPage[0]);
+      this.pageNumber = this.lastPage[1];
+
+    } else {
+      var displayed = this.rendition.display();
+      this.pageNumber = 0
+
+    }
+
+
 
   }
 })
@@ -158,8 +241,7 @@ button {
   margin: 0 auto;
   text-decoration: none;
   border: none;
-  background-color:white;
-  width: 500px;
+  background-color: white;
 }
 
 .return {
