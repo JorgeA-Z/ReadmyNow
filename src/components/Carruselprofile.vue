@@ -52,7 +52,7 @@ export default defineComponent({
             },
         },
     }),
-    mounted() {
+    created() {
 
         const latestQuery = query(collection(db, 'DetalleLibrero'), where('User', '==', this.User) );
         const unsubscribe = onSnapshot(latestQuery, async (snapshot) => {
@@ -126,6 +126,7 @@ export default defineComponent({
 </template>
   
 <style scoped>
+
 .link {
     margin: 0;
     padding: 0;

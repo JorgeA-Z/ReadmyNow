@@ -21,6 +21,9 @@ const router = createRouter({
         { path: "/Discover", component: () => import("../views/Discover.vue"), meta: {requiresAuth: true,
         } 
         },
+        { path: "/Galery", component: () => import("../views/Galery.vue"), meta: {requiresAuth: true,
+        } 
+        },
 
 
     ],

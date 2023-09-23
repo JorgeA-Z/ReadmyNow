@@ -261,7 +261,7 @@ export default defineComponent({
         </button>
 
         <button class="btn share">
-          SHARE
+          BOOKMARK
         </button>
 
       </div>

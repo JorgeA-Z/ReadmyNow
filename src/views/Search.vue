@@ -2,13 +2,19 @@
 import Nabvar from '../components/Nabvar.vue';
 import { getFirestore, onSnapshot, collection, doc, query, getDoc, where, or } from 'firebase/firestore';
 import Results from '../components/Results.vue';
+import {ref } from 'vue'
+
 const db = getFirestore();
 export default {
 
   data() {
     return {
       searchQuery: '',
-      searchResults: []
+      Books: ref([]),
+      results: ref([]),
+      indice: {},
+
+
     };
   },
   components:
@@ -21,31 +27,65 @@ export default {
     search() {
 
       // Realiza la búsqueda en Firebase Firestore aquí
-      this.searchResults = [];
 
-      const Query = this.searchQuery.trim()
       
-      const latestQuery = query(collection(db, 'Libro'), or(where('Nombre', '==', Query), where('Genero', '==', Query), where('Subgenero', '==', Query)));
-      const unsubscribe = onSnapshot(latestQuery, async (snapshot) => {
-        snapshot.forEach((doc) => {
-          var book =
+      const Query = this.searchQuery.trim().toLocaleLowerCase()
+      
+      console.log(Query)
+      
+
+      this.results = this.indice[Query] || [];
+
+    }
+  },
+  created() {
+    const q = query(collection(db, "Libro"));
+    onSnapshot(q, async (snapshot) => {
+      snapshot.forEach( async (doc) => {
+        
+        const AutorDoc = await getDoc(doc.get("Autor"));
+
+        var book =
+        {
+          //Datos solicitados para la IA organizados en la estructura del algoritmo
+          Genero: doc.get("Genero"),
+          Subgenero: doc.get("Subgenero"),
+
+
+          ID: doc.id,
+
+          About: doc.get("About"),
+          
+          AutorName: AutorDoc.get("Nombre"),
+          AutorLastname: AutorDoc.get("Apellido"),
+
+          Caratula: doc.get("Caratula"),
+          
+          Nombre: doc.get("Nombre"),
+          
+          Libro: doc.get("Url"),
+        }
+        
+        const palabras = [book.Genero.toLowerCase(), book.Subgenero.toLowerCase(), book.AutorName.toLowerCase(), book.AutorLastname.toLowerCase(), book.AutorName.toLowerCase() + " " + book.AutorLastname.toLowerCase(), book.Nombre.toLowerCase()]
+      
+        for(const palabra of palabras)
+        {
+          if(!this.indice[palabra])
           {
-            ID: doc.id,
-            Nombre: doc.get('Nombre'),
-            Caratula: doc.get('Caratula'),
-            Libro: doc.get('Url'),
-            Autor: doc.get('Autor'),
-
+            this.indice[palabra] = []
           }
-          console.log(doc)
-          this.searchResults.push(book)
-        });
-
+          this.indice[palabra].push(book);
+        }
 
       })
 
-    }
-  }
+    })
+
+  },
+  mounted() 
+  {
+
+  },
 };
 
 </script >
@@ -65,8 +105,9 @@ export default {
 
   <div class="m-3">
 
-    <span class="text">ALL RESULTS</span>
-    <Results :books="searchResults" ></Results>
+    <span v-if="results.length > 0" class="text">ALL RESULTS</span>
+    <span v-if="results.length == 0" class="text">NO RESULTS</span>
+    <Results :books="results"></Results>
   </div>
 </template>
 
