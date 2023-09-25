@@ -23,7 +23,7 @@ const register = () => {
             router.push('/Discover')
         })
         .catch((error)=> {
-            console.log(error.code);
+           //console.log(error.code);
             switch (error.code)
             {
                 case "auth/invalid-email":
@@ -55,7 +55,7 @@ const signInWithGoogle = () => {
     })
     .catch((error)=>
     {
-        console.log(error.code);
+        //console.log(error.code);
         alert(error.message);
     })
 

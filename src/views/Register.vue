@@ -26,7 +26,7 @@ const register = () => {
             router.push('/Discover')
         })
         .catch((error) => {
-            console.log(error.code);
+            //console.log(error.code);
             alert(error.message);
         })
 
@@ -40,7 +40,7 @@ const signInWithGoogle = () => {
 
         })
         .catch((error) => {
-            console.log(error.code);
+            //console.log(error.code);
             alert(error.message);
         })
 

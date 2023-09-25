@@ -70,7 +70,7 @@ export default defineComponent({
     next() {
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      console.log()
+      //console.log()
 
       if (this.rendition.location.atEnd != true) {
         this.rendition.next();

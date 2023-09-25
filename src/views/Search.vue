@@ -31,7 +31,7 @@ export default {
       
       const Query = this.searchQuery.trim().toLocaleLowerCase()
       
-      console.log(Query)
+      //console.log(Query)
       
 
       this.results = this.indice[Query] || [];

@@ -16,24 +16,21 @@ export default defineComponent({
     },
     methods:
     {
-        LibrosRecomendados(generos, librero, libreroPopular) {
+        LibrosRecomendados(generos, libreroPopular) {
             var orden = [];
 
             var generoStep = 0;
             //Tomamos todos los libros en el librero que coincidan con el genero
-            
-            console.log(generos, librero, libreroPopular)
-
             for (var i = 0; i < generos.length; i++) {
                 var temp = [];
-                for (var j = 0; j < librero.length; j++) {
-
-                    if (libreroPopular[j].Genero == generos[i].genero) {
+                for (var j = 0; j < libreroPopular.length; j++) {
+                    if (libreroPopular[j].Genero == generos[i].genero || libreroPopular[j].Subgenero == generos[i].genero) {
                         temp.push(libreroPopular[j]);
+                        libreroPopular.splice(j, 1);
+                        j--;
                     }
                 }
                 //Aleatorizamos el orden de recomendacion del paso por genero
-
                 var mixed = this.mezclarFisherYates(temp);
 
                 for (var k = 0; k < mixed.length; k++) {
@@ -46,21 +43,23 @@ export default defineComponent({
                     }
                 }
             }
+
             return orden;
         },
 
         RecomendacionesUsuario(libreroUsuario, generosLiterarios) {
-
             var popularidad = [];
             var generosPopularidad =
                 [{
                     genero: "",
                     popularidad: 0
                 }];
-
             generosPopularidad.splice(0, 1);
             for (var i = 0; i < generosLiterarios.length; i++) {
-                var objeto = { genero: generosLiterarios[i], popularidad: 0 };
+                var objeto =
+                {
+                    genero: generosLiterarios[i], popularidad: 0
+                };
                 generosPopularidad.push(objeto);
             }
 
@@ -69,29 +68,34 @@ export default defineComponent({
                 var sumaPopularidad = 0;
 
 
-                if (libro.Favorito === true) {
+                if (libro.Favorito == true) {
                     sumaPopularidad += 2.5;
                 }
 
                 // Cada 7 min de lectura es un punto para su popularidad
-                sumaPopularidad += libro.TiempoIndividual / 7;
+                sumaPopularidad += libro.TiempoIndividual / 2;
 
                 // Agregar la suma de popularidad al arreglo
                 popularidad.push(sumaPopularidad);
 
                 // Obtener la posición del género en el arreglo y sumar la popularidad al arreglo de génerosPopularidad
                 var generoIndex = generosLiterarios.indexOf(libro.Genero);
+
                 if (generoIndex != -1) {
                     generosPopularidad[generoIndex].popularidad = sumaPopularidad;
                 }
+
                 var subGeneroIndex = generosLiterarios.indexOf(libro.Subgenero);
-                
-                
                 if (subGeneroIndex != -1) {
                     generosPopularidad[subGeneroIndex].popularidad = sumaPopularidad;
                 }
             }
-            var generosResultantes = this.quickSort(generosPopularidad);
+            if (libreroUsuario.length > 0) {
+                var generosResultantes = this.quickSortInverso(generosPopularidad);
+            }
+            else {
+                generosResultantes = libreroUsuario;
+            }
             // Devolver arreglos de géneros y subgéneros ordenados por popularidad
             return generosResultantes; // Popularidad por género
         },
@@ -113,25 +117,27 @@ export default defineComponent({
                 var sumaPopularidad = 0;
 
                 //Por cada favorito agregamos 0.25 a la suma
-                sumaPopularidad += libro.Likes / 0.5;
+                sumaPopularidad += libro.Likes * 0.25;
 
-                // Cada 14 min de lectura es un punto para su popularidad
-                sumaPopularidad += libro.TiempoGlobal / 14;
+                // Cada min de lectura es un punto para su popularidad
+                sumaPopularidad += libro.TiempoGlobal / 60;
 
                 // Agregar la suma de popularidad al arreglo
                 popularidad.push(sumaPopularidad);
 
                 // Obtener la posición del género en el arreglo y sumar la popularidad al arreglo de génerosPopularidad
                 var generoIndex = generosLiterarios.indexOf(libro.Genero);
+                //console.log(libro.Genero, generoIndex, sumaPopularidad);
                 if (generoIndex !== -1) {
-                    generosPopularidad[generoIndex].popularidad = sumaPopularidad;
+                    generosPopularidad[generoIndex].popularidad += sumaPopularidad;
                 }
                 var subGeneroIndex = generosLiterarios.indexOf(libro.Subgenero);
                 if (subGeneroIndex !== -1) {
-                    generosPopularidad[subGeneroIndex].popularidad = sumaPopularidad;
+                    generosPopularidad[subGeneroIndex].popularidad += sumaPopularidad;
                 }
             }
-            var generosResultantes = this.quickSort(generosPopularidad);
+
+            var generosResultantes = this.quickSortInverso(generosPopularidad);
             // Devolver arreglos de géneros y subgéneros ordenados por popularidad
 
             return generosResultantes; // Popularidad por género
@@ -141,7 +147,6 @@ export default defineComponent({
             // Paso 1: Crear diccionarios de popularidad
             const arreglo_1 = {};
             const arreglo_2 = {};
-            
 
             usuario.forEach(item => {
                 arreglo_1[item.genero] = item.popularidad;
@@ -150,48 +155,53 @@ export default defineComponent({
             popular.forEach(item => {
                 arreglo_2[item.genero] = item.popularidad;
             });
-            
-            
-            
+            /*
             var arreglo1 = [];
             var arreglo2 = [];
-            
+
             usuario.forEach(item => {
                 arreglo1.push(item.genero);
             });
-            
+
             popular.forEach(item => {
                 arreglo2.push(item.genero);
             });
+            */
 
-            
             // Calcular la longitud de los arreglos
             const totalLength = generosLiterarios.length;
-            
+
             // Crear el tercer arreglo ponderado
             var nuevoArreglo =
-            [{
-                genero: "",
-                popularidad: 0
-            }];
+                [{
+                    genero: "",
+                    popularidad: 0
+                }];
             nuevoArreglo.splice(0, 1);
-            
-            
+
             for (let i = 0; i < totalLength; i++) {
-                const elementoArreglo1 = arreglo1.indexOf(generosLiterarios[i]);
-                const elementoArreglo2 = arreglo2.indexOf(generosLiterarios[i]);
-                
                 // Calcular el valor ponderado
-                const valorPonderado = (influenciaUsuario * elementoArreglo1) + (influenciaPopularidad * elementoArreglo2);
-                
+                var pU = arreglo_1[generosLiterarios[i]];
+
+                var pG = arreglo_2[generosLiterarios[i]];
+                if (pU == null) {
+                    pU = 0;
+                }
+                if (pG == null) {
+                    pG = 0;
+                }
+                const valorPonderado = (influenciaUsuario * pU) + (influenciaPopularidad * pG);
+
+                //console.log(generosLiterarios[i], pU, pG, valorPonderado);
+
                 // Agregar el valor ponderado al nuevo arreglo si no está presente
                 if (!nuevoArreglo.includes(valorPonderado)) {
                     var objeto = { genero: generosLiterarios[i], popularidad: valorPonderado };
                     nuevoArreglo.push(objeto);
                 }
             }
-            var generosResultantes = this.quickSortInverso(nuevoArreglo);
 
+            var generosResultantes = this.quickSortInverso(nuevoArreglo);
             // Devolver arreglos de géneros y subgéneros ordenados por popularidad
             return generosResultantes;
         },
@@ -218,57 +228,90 @@ export default defineComponent({
         },
 
         quickSort(lista) {
-            if (lista.length <= 1) {
-                return lista;
-            }
-
-            var pivot = lista[Math.floor(lista.length / 2)];
-            var left = [];
-            var right = [];
-
-            for (var i = 0; i < lista.length; i++) {
-                if (lista[i].popularidad < pivot.popularidad) {
-                    left.push(lista[i]);
-                } else if (lista[i].popularidad > pivot.popularidad) {
-                    right.push(lista[i]);
+            var n = lista.length;
+            for (var i = 0; i < n - 1; i++) {
+                for (var j = 0; j < n - i - 1; j++) {
+                    if (lista[j].popularidad > lista[j + 1].popularidad) {
+                        // Intercambiar elementos si están en el orden incorrecto
+                        var temp = lista[j];
+                        lista[j] = lista[j + 1];
+                        lista[j + 1] = temp;
+                    }
                 }
             }
-
-            return this.quickSort(right).concat([pivot], this.quickSort(left));
+            return lista;
         },
-
+        /* Es practicamente BubbleSort
+        quickSortInverso(lista) {
+            var n = lista.length;
+            for (var i = 0; i < n - 1; i++) {
+                for (var j = 0; j < n - i - 1; j++) {
+                    if (lista[j].popularidad < lista[j + 1].popularidad) { // Cambio de '>' a '<'
+                        // Intercambiar elementos si están en el orden incorrecto
+                        var temp = lista[j];
+                        lista[j] = lista[j + 1];
+                        lista[j + 1] = temp;
+                    }
+                }
+            }
+            return lista;
+        },
+        */
         quickSortInverso(lista) {
             if (lista.length <= 1) {
                 return lista;
             }
 
-            var pivot = lista[Math.floor(lista.length / 2)];
-            var left = [];
-            var right = [];
+            var stack = [];
+            stack.push({ left: 0, right: lista.length - 1 });
 
-            for (var i = 0; i < lista.length; i++) {
-                if (lista[i].popularidad > pivot.popularidad) { // Cambiar a "<" para ordenar de mayor a menor
-                    left.push(lista[i]);
-                } else if (lista[i].popularidad < pivot.popularidad) { // Cambiar a ">" para ordenar de mayor a menor
-                    right.push(lista[i]);
+            while (stack.length > 0) {
+                var { left, right } = stack.pop();
+                var pivotIndex = this.partitionInverso(lista, left, right);
+
+                if (left < pivotIndex - 1) {
+                    stack.push({ left, right: pivotIndex - 1 });
+                }
+                if (pivotIndex < right) {
+                    stack.push({ left: pivotIndex, right });
                 }
             }
 
-            return this.quickSortInverso(right).concat([pivot], this.quickSortInverso(left));
+            return lista;
         },
 
+        partitionInverso(lista, left, right) {
+            var pivot = lista[Math.floor((left + right) / 2)];
+            while (left <= right) {
+                while (lista[left].popularidad > pivot.popularidad) {
+                    left++;
+                }
+                while (lista[right].popularidad < pivot.popularidad) {
+                    right--;
+                }
+                if (left <= right) {
+                    var temp = lista[left];
+                    lista[left] = lista[right];
+                    lista[right] = temp;
+                    left++;
+                    right--;
+                }
+            }
+            return left;
+        },
         async IA() {
 
 
             var generosLiterarios =
-                ["Poesia", "Epistola", "Ensayo", "Teatro", "Drama", "Novela",
-                    "Filosofica", "Espiritual", "Religion", "Aventura", "Viajes",
-                    "Exploracion", "Ciencia", "Educacion", "Infantil", "Juvenil",
-                    "Clasicos", "Fantasia", "Historica Alternativa", "Ciencia Ficcion",
-                    "Utopica", "Distopia", "Gotica", "Post-Apocaliptica", "Suspenso",
-                    "Terror", "Misterio", "Erotica", "Auto-Ayuda"];
-            var influenciaUsuario = 0.75;
-            var influenciaPopularidad = 0.25;
+                ["Romance", "Poesia", "Epistola", "Ensayo", "Teatro", "Drama", "Novela",
+                    "Filosofia", "Espiritual", "Religion", "Aventura", "Viajes",
+                    "Exploracion", "Ciencia", "Educacion", "Infantil",
+                    "Cuentos", "Clasicos", "Fantasia", "H.Alternativa", "C.Ficcion",
+                    "Utopica", "Distopia", "Gotica", "PostApocalipsis", "Suspenso",
+                    "Terror", "Misterio", "Erotica", "Help"];
+
+            var influenciaUsuario = 0.9;
+            var influenciaPopularidad = 0.1;
 
             var libreroPopular = await this.getGlobalShelf();
 
@@ -281,8 +324,9 @@ export default defineComponent({
 
             var generosRecomendados = this.Recomendaciones(generosUsuario, generosPopulares, influenciaUsuario, influenciaPopularidad, generosLiterarios);
 
-            this.books = this.LibrosRecomendados(generosRecomendados, libreroPopular, libreroPopular);
+            this.books = this.LibrosRecomendados(generosRecomendados, libreroPopular);
 
+            //console.log(generosUsuario, generosPopulares, generosRecomendados, this.books);
         },
         async getGlobalShelf() {
             var libreroPopular = [];
@@ -297,10 +341,10 @@ export default defineComponent({
                     Likes: doc.get("Likes"),
                     Genero: doc.get("Genero"),
                     Subgenero: doc.get("Subgenero"),
-    
-    
+
+
                     ID: doc.id,
-    
+
                     About: doc.get("About"),
                     Autor: doc.get("Autor"),
                     Caratula: doc.get("Caratula"),
@@ -308,7 +352,7 @@ export default defineComponent({
                     Libro: doc.get("Url"),
                 }
                 libreroPopular.push(book);
-            
+
             }
 
             return libreroPopular;
