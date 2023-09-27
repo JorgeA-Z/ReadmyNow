@@ -66,7 +66,6 @@ export default defineComponent({
 
                 const AutorDoc = await getDoc(AutorRef);
 
-
                 this.Cantidad += 1;
 
                 var libro = {
