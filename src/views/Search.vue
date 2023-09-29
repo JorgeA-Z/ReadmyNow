@@ -66,8 +66,18 @@ export default {
           Libro: doc.get("Url"),
         }
         
-        const palabras = [book.Genero.toLowerCase(), book.Subgenero.toLowerCase(), book.AutorName.toLowerCase(), book.AutorLastname.toLowerCase(), book.AutorName.toLowerCase() + " " + book.AutorLastname.toLowerCase(), book.Nombre.toLowerCase()]
-      
+        const palabras = [book.Genero.toLowerCase(), book.Subgenero.toLowerCase(), book.AutorName.toLowerCase(), book.AutorLastname.toLowerCase(), book.AutorName.toLowerCase() + " " + book.AutorLastname.toLowerCase(), book.Nombre.toLowerCase(), book.AutorLastname.toLowerCase() + " " + book.AutorName.toLowerCase()]
+
+        const nombres =  book.Nombre.toLowerCase().split(" ");
+
+        if(nombres.length > 1)
+        {
+          for(const nombre of nombres)
+          {
+            palabras.push(nombre)
+          }
+        }
+
         for(const palabra of palabras)
         {
           if(!this.indice[palabra])
@@ -80,6 +90,8 @@ export default {
       })
 
     })
+
+    console.log(this.indice)
 
   },
   mounted() 

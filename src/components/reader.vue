@@ -1,5 +1,5 @@
 <script >
-import { defineComponent, ref, onUnmounted } from 'vue'
+import { defineComponent, ref, onUnmounted, toHandlers } from 'vue'
 import ePub from 'epubjs';
 import { getFirestore, collection, query, where, getDoc, doc, getDocs, setDoc, addDoc, and } from "firebase/firestore";;
 
@@ -12,11 +12,13 @@ export default defineComponent({
     user: String,
     id: String,
     lastPage: Array,
+    marcadores: Array,
 
   },
   methods:
   {
     async actualiza() {
+
       const bookRef = doc(db, "Libro", this.id);
       const q = query(collection(db, "DetalleLibrero"), and(where("Libro", "==", bookRef), where("User", "==", this.user)));
       const querySnapshot = await getDocs(q);
@@ -27,17 +29,19 @@ export default defineComponent({
 
       p = this.rendition.location.start.cfi
 
+      this.handleMarks(p)
+
       var page = [p, this.pageNumber]
 
-
       querySnapshot.forEach((docS) => {
+
         setDoc(doc(db, 'DetalleLibrero', docS.id), {
 
           Favorito: docS.get('Favorito'),
 
           Libro: docS.get('Libro'),
 
-          Marcadores: docS.get('Marcadores'),
+          Marcadores: this.marcadores,
 
           Page: page,
 
@@ -70,17 +74,21 @@ export default defineComponent({
     next() {
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      //console.log()
 
       if (this.rendition.location.atEnd != true) {
         this.rendition.next();
+
         this.pageNumber = this.pageNumber + 1;
         this.actualiza()
       }
+
+
+
     },
     prev() {
 
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); // 'smooth' proporciona un desplazamiento suave
+
 
       if (this.rendition.location.atStart != true) {
         this.rendition.prev();
@@ -89,16 +97,50 @@ export default defineComponent({
       }
 
     },
+
+
     marcador() {
+      console.log(this.rendition.book)
+      console.log(this.rendition.location)
+
       let p;
-      p = this.rendition.location.start.cfi
-      this.marcadores.push(p)
+
+      p = this.rendition.location.start.cfi;
+
+      if (!this.IsMarked(p)) {
+        this.marcadores.push(p);
+        this.actualiza();
+      } else {
+
+        const indiceAEliminar = this.marcadores.indexOf(p);
+
+        this.marcadores.splice(indiceAEliminar, 1); // Elimina 1 elemento en el índice especificado
+
+
+        this.actualiza();
+      }
+
     },
+    handleMarks(p) {
+      this.bookmark = this.IsMarked(p);
+    },
+
+    IsMarked(pagina) {
+      if (this.marcadores.includes(pagina)) {
+        return true;
+
+      } else {
+        return false;
+      }
+    },
+
     handleResize() {
       // Actualizar la propiedad windowWidth con el nuevo ancho de la ventana
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
+      // Redimensiona la vista del libro
       this.rendition.resize(windowWidth)
+
 
     },
     time() {
@@ -112,18 +154,20 @@ export default defineComponent({
       return tiempoEnLaPagina
 
     },
-
   },
-  data: () => ({
-    w: ref(window.innerWidth),
-    h: ref(window.innerHeight),
-    pageNumber: ref(0),
-    rendition: ref(),
-    book: ref(),
-    horaEntrada: ref(),
-    marcadores: ref([]),
+  data() {
+    return {
 
-  }),
+      w: ref(window.innerWidth),
+      h: ref(667),
+      pageNumber: ref(0),
+      rendition: ref(),
+      book: ref(),
+      horaEntrada: ref(),
+      bookmark: ref(false),
+    };
+  },
+
   created() {
     // Agregar un event listener para el evento de redimensionamiento de la ventana
     window.addEventListener('resize', this.handleResize);
@@ -142,17 +186,17 @@ export default defineComponent({
       manager: "continuous",
       flow: "paginated", spread: "none", allowScriptedContent: true, width: this.w, height: this.h
     });
+
     if (this.lastPage[1] != 0) {
       var displayed = this.rendition.display(this.lastPage[0]);
       this.pageNumber = this.lastPage[1];
 
+      this.handleMarks(this.lastPage[0])
+
     } else {
       var displayed = this.rendition.display();
-      this.pageNumber = 0
-
+      this.pageNumber = 0;
     }
-
-
 
   }
 })
@@ -176,12 +220,23 @@ export default defineComponent({
         <h5 class="readme">ReadMeNow!</h5>
 
         <!-- Icono para marcar libro -->
-        <svg @click="marcador" xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 40 35" fill="none"
-          class="marcador">
+
+        <svg v-if="bookmark" @click="marcador" xmlns="http://www.w3.org/2000/svg" width="40" height="35"
+          viewBox="0 0 40 35" fill="#7A60A9" class="marcador">
           <path
             d="M6.66663 11.375C6.66663 8.92477 6.66663 7.69966 7.21159 6.76379C7.69096 5.94058 8.45586 5.27129 9.39667 4.85185C10.4662 4.375 11.8664 4.375 14.6666 4.375H25.3333C28.1336 4.375 29.5337 4.375 30.6032 4.85185C31.5441 5.27129 32.309 5.94058 32.7883 6.76379C33.3333 7.69966 33.3333 8.92477 33.3333 11.375V30.625L28.75 27.7083L24.5833 30.625L20 27.7083L15.4166 30.625L11.25 27.7083L6.66663 30.625V11.375Z"
             stroke="#7A60A9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
+
+        <svg v-else @click="marcador" xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 40 35"
+          fill="none" class="marcador">
+          <path
+            d="M6.66663 11.375C6.66663 8.92477 6.66663 7.69966 7.21159 6.76379C7.69096 5.94058 8.45586 5.27129 9.39667 4.85185C10.4662 4.375 11.8664 4.375 14.6666 4.375H25.3333C28.1336 4.375 29.5337 4.375 30.6032 4.85185C31.5441 5.27129 32.309 5.94058 32.7883 6.76379C33.3333 7.69966 33.3333 8.92477 33.3333 11.375V30.625L28.75 27.7083L24.5833 30.625L20 27.7083L15.4166 30.625L11.25 27.7083L6.66663 30.625V11.375Z"
+            stroke="#7A60A9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+
+
+
       </div>
     </nav>
 
@@ -189,49 +244,49 @@ export default defineComponent({
   <!-- Lector Epub -->
   <div class="lector">
 
-    <div class="container">
-      <div class="row align-items-end">
-        <div class="col">
-        </div>
-        <div class="col text-center">
-          <button id="prev" @click="prev()" class="readme">
-            «
-          </button>
-        </div>
-        <div class="col">
-
-        </div>
-      </div>
+<div class="container">
+  <div class="row align-items-end">
+    <div class="col">
     </div>
-
-
-
-    <div id="area"></div>
-
-
-    <div class="container">
-      <div class="row align-items-end">
-        <div class="col">
-          <small class="muted readme">
-            <span>
-              {{ pageNumber }}
-
-            </span>
-          </small>
-        </div>
-        <div class="col text-center">
-          <button id="next" @click="next()" class="readme ">
-            »
-          </button>
-        </div>
-        <div class="col">
-
-        </div>
-      </div>
+    <div class="col text-center">
+      <button id="prev" @click="prev()" class="readme">
+        «
+      </button>
     </div>
+    <div class="col">
 
-
+    </div>
   </div>
+</div>
+
+
+
+<div id="area"></div>
+
+
+<div class="container">
+  <div class="row align-items-end">
+    <div class="col">
+      <small class="muted readme">
+        <span>
+          {{ pageNumber }}
+
+        </span>
+      </small>
+    </div>
+    <div class="col text-center">
+      <button id="next" @click="next()" class="readme ">
+        »
+      </button>
+    </div>
+    <div class="col">
+
+    </div>
+  </div>
+</div>
+
+
+</div>
 </template>
 
 <style scoped>
@@ -254,6 +309,7 @@ button {
 
 .lector {
   margin-top: 65px;
+  width: 100%;
 }
 
 .header-read {

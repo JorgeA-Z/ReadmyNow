@@ -75,6 +75,7 @@ export default defineComponent({
           Visita: docS.get('Visita') + 1,
         })
         this.lp = docS.get('Page');
+        this.mr = docS.get('Marcadores');
       })
 
     },
@@ -133,6 +134,7 @@ export default defineComponent({
     User: auth.currentUser.uid,
     reading: ref(false),
     lp: ref(["", 0]),
+    mr: ref([]),
 
 
   }),
@@ -201,7 +203,7 @@ export default defineComponent({
 
   <Loading v-if="isLoading"></Loading>
   <div v-if="reading == true">
-    <Reader :link="bookData.Url" :id="ID" :user="User" :lastPage="lp"></Reader>
+    <Reader :link="bookData.Url" :id="ID" :user="User" :lastPage="lp" :marcadores="mr"></Reader>
 
   </div>
 
