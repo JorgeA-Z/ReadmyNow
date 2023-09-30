@@ -47,7 +47,7 @@ import Text from '../components/Text.vue';
   content: '';  
   position: absolute;
   /* Position */
-  left: 267px;
+  left: 257px;
   top: 21px;
   /* Size */
   width: 32px;
