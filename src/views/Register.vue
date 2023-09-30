@@ -93,7 +93,7 @@ const CreateUser = (User) => {
 
 
                 <button type="submit" class="btn boton1" @click="register">
-                    LOG IN
+                    REGISTER
                 </button>
 
                 <button type="submit" class="btn boton2" @click="signInWithGoogle">

@@ -1,7 +1,7 @@
 <script>
 
 import Nabvar from '../components/Nabvar.vue';
-import Reader from '../components/Reader.vue';
+import Reader from '../components/reader.vue';
 import Loading from '../components/Loading.vue';
 
 import { defineComponent, ref } from 'vue'
@@ -226,14 +226,14 @@ export default defineComponent({
     <div class="d-flex icons">
 
       <svg v-if="fav == false" @click="favorites" xmlns="http://www.w3.org/2000/svg" width="30" height="34"
-        viewBox="0 0 22 20" fill="none" class="mx-2 equis">
+        viewBox="0 0 22 20" fill="none" class="mx-2 corazon">
         <path
           d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
           stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
 
       <svg v-if="fav == true" @click="favorites" xmlns="http://www.w3.org/2000/svg" width="30" height="34"
-        viewBox="0 0 22 20" fill="none" class="mx-2 equis">
+        viewBox="0 0 22 20" fill="none" class="mx-2 corazon">
         <path
           d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
           stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -258,12 +258,8 @@ export default defineComponent({
       <!-- Botones para leer y compartir -->
       <div class="my-4 row justify-content-center">
 
-        <button class="me-4 me-sm-5 btn read" @click="popbook">
-          READ
-        </button>
-
-        <button class="btn share">
-          BOOKMARK
+        <button class="btn read" @click="popbook">
+          READ NOW!
         </button>
 
       </div>
@@ -301,6 +297,11 @@ export default defineComponent({
 }
 
 .equis {
+  cursor: pointer;
+}
+
+.corazon
+{
   cursor: pointer;
 }
 
@@ -344,8 +345,8 @@ export default defineComponent({
 }
 
 .read {
-  width: 163px;
-  height: 52px;
+  width: 300px;
+  height: 55px;
   flex-shrink: 0;
   border-radius: 6px;
   background: #7A60A9;
@@ -434,6 +435,14 @@ export default defineComponent({
   }
 
   .equis {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .corazon
+  {
+    margin-top: 5px;
     width: 20px;
     height: 20px;
     flex-shrink: 0;

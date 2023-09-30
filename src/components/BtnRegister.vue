@@ -36,6 +36,13 @@ import Text from '../components/Text.vue';
     text-transform: uppercase;
 }
 
+@media screen and (max-width: 366px) {
+  .register {
+    width: 130px;
+    height: 52px;
+  }
+}
+
 .btn:focus {
     border-color:rgb(122, 96, 169);
     box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169,0.6);

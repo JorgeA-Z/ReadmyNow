@@ -133,7 +133,7 @@ export default defineComponent({
 .text-user {
   color: #7A60A9;
   font-family: 'Comfortaa', cursive;
-  font-size: 50px;
+  font-size: 45px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -161,8 +161,13 @@ export default defineComponent({
   background: #7A60A9;
 
   /*Atributos del Texto*/
-  color: #FFF;
   text-align: center;
+}
+
+.text {
+  /*Atributos del Texto*/
+  margin-top: 9px;
+  color: #FFF;
   font-family: 'Comfortaa', cursive;
   font-size: 17px;
   font-style: normal;
@@ -170,10 +175,6 @@ export default defineComponent({
   line-height: normal;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-}
-
-.text {
-  color: #FFF;
 }
 
 .config:focus {
@@ -227,5 +228,15 @@ export default defineComponent({
   font-weight: 900;
   line-height: normal;
   letter-spacing: 0.8px;
+}
+
+@media screen and (max-width: 560px)
+{
+
+  .text-location 
+  {
+  font-size: 15px;
+  }
+
 }
 </style>
