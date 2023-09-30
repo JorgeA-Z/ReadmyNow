@@ -47,7 +47,7 @@ import Text from '../components/Text.vue';
   content: '';  
   position: absolute;
   /* Position */
-  left: 270px;
+  left: 267px;
   top: 21px;
   /* Size */
   width: 32px;
@@ -67,5 +67,24 @@ import Text from '../components/Text.vue';
     transform: rotate(360deg);
   }
 }   
+
+@media screen and (max-width: 450px)
+{
+  .loader::before {
+  content: '';  
+  position: absolute;
+  /* Position */
+  left: 270px;
+  top: 21px;
+  /* Size */
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 5px solid #D6C8E1;
+  border-bottom-color: #7A60A9;
+  box-sizing: border-box;
+  animation: rotation 0.6s linear infinite;
+  }
+}
 
 </style>
