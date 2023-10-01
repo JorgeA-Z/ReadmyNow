@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^10.4.1",
     "epubjs": "^0.3.93",
     "firebase": "^10.1.0",
     "vue": "^3.3.4",

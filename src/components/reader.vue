@@ -3,10 +3,15 @@ import Text from '../components/Text.vue';
 import { defineComponent, ref, onUnmounted, toHandlers } from 'vue'
 import ePub from 'epubjs';
 import { getFirestore, collection, query, where, getDoc, doc, getDocs, setDoc, addDoc, and } from "firebase/firestore";;
+//import { useSwipe } from '@vueuse/core'
 
 const db = getFirestore();
 
 export default defineComponent({
+  components:
+  {
+    Text,
+  },
   props:
   {
     link: String,
@@ -18,6 +23,24 @@ export default defineComponent({
   },
   methods:
   {
+
+    setupSwipe() {
+
+      const swipeArea = ref(null);
+      if (swipeArea.value) {
+        // Configura useSwipe en el elemento deseado
+        const swipe = useSwipe(swipeArea.value);
+
+        swipe.on('left', () => {
+          alert('Swiped left');
+        });
+
+        swipe.on('right', () => {
+          alert('Swiped right');
+        });
+      }
+    },
+
     async actualiza() {
 
       const bookRef = doc(db, "Libro", this.id);
@@ -101,8 +124,6 @@ export default defineComponent({
 
 
     marcador() {
-      console.log(this.rendition.book)
-      console.log(this.rendition.location)
 
       let p;
 
@@ -172,11 +193,7 @@ export default defineComponent({
   created() {
     // Agregar un event listener para el evento de redimensionamiento de la ventana
     window.addEventListener('resize', this.handleResize);
-    
-    window.addEventListener('swiped-left', this.next);
-    
-    window.addEventListener('swiped-right',this.prev);
-    
+
     this.horaEntrada = new Date();
 
 
@@ -184,12 +201,6 @@ export default defineComponent({
   beforeDestroy() {
     // Asegurarse de quitar el event listener cuando el componente se destruye para evitar fugas de memoria
     window.removeEventListener('resize', this.handleResize);
-    
-    window.removeEventListener('swiped-left', this.next);
-    
-    window.removeEventListener('swiped-right',this.prev);
-    
-
 
   },
   mounted() {
@@ -209,7 +220,7 @@ export default defineComponent({
       var displayed = this.rendition.display();
       this.pageNumber = 0;
     }
-
+    this.setupSwipe();
   }
 })
 </script>
@@ -354,6 +365,7 @@ button {
 }
 
 .botones {
+  user-select: none;
   margin-left: 95px;
   display: flex;
   justify-content: center;
@@ -373,6 +385,7 @@ button {
 
 .flechas {
   cursor: pointer;
+
 }
 
 .marcador {
