@@ -114,19 +114,24 @@ const CreateUser = (User) => {
     letter-spacing: -0.54px;
 }
 
+.dark .general
+{
+    background-color: #20202d;
+}
+
 .general {
     width: 343px;
     height: 52px;
     flex-shrink: 0;
     border: 2px solid #7A60A9;
-    background-color: #fff;
+    background-color: white;
 
     /*Atributos del texto*/
     color: #7A60A9;
     font-family: 'Comfortaa', cursive;
     font-size: 15px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 900;
     line-height: normal;
 }
 
@@ -144,7 +149,7 @@ const CreateUser = (User) => {
     font-family: 'Comfortaa', cursive;
     font-size: 15px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 900;
     line-height: normal;
 }
 

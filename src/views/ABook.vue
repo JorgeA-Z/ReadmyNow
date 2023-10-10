@@ -284,6 +284,11 @@ export default defineComponent({
 </template>
 
 <style scoped>
+.dark .about-text
+{
+  color: #FFF;
+}
+
 .acomodo {
   position: absolute;
   z-index: 2;
@@ -450,4 +455,3 @@ export default defineComponent({
 
 }
 </style>
-

@@ -4,9 +4,6 @@ import IconHouse from '../components/icons/IconHouse.vue';
 import IconSearch from '../components/icons/IconSearch.vue';
 import IconRead from '../components/icons/IconRead.vue';
 import IconProfile from '../components/icons/IconProfile.vue';
-
-
-
 </script>
 
 <template>
@@ -44,6 +41,10 @@ import IconProfile from '../components/icons/IconProfile.vue';
 
 
 <style scoped>
+.dark .header
+{
+  background: #2C2C20;
+}
 
 *
 {

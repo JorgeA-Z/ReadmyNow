@@ -21,6 +21,11 @@ import Text from '../components/Text.vue';
 </template>
 
 <style scoped>
+.dark .todo
+{
+  background-color: #20202d;
+}
+
 .todo {
   top: 0;
   position: fixed;

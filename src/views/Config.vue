@@ -4,7 +4,12 @@ import Arrow from '../components/icons/Arrow.vue';
 import Gear from '../components/icons/Gear.vue';
 import Direction from '../components/icons/Direction.vue';
 import Plus from '../components/icons/Plus.vue';
-import {getAuth} from "firebase/auth";
+import { getAuth } from "firebase/auth";
+
+import { useDark, useToggle } from '@vueuse/core'
+
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
 
 const auth = getAuth();
 
@@ -15,8 +20,7 @@ const name = auth.currentUser.displayName;
 </script>
 
 <template>
-
-  <Nabvar/>
+  <Nabvar />
   <div class="container">
 
     <div class="mt-4 mb-3 d-flex setting">
@@ -42,17 +46,13 @@ const name = auth.currentUser.displayName;
       <div class="col-lg-4 align-self-center">
 
         <div class="row justify-content-center">
-            <img
-              :src=image
-              class="m-4 rounded-circle img-fluid img-user" alt="">
+          <img :src=image class="m-4 rounded-circle img-fluid img-user" alt="">
 
-            <h1 class=" text-capitalize text-user">{{name}}</h1>
+          <h1 class=" text-capitalize text-user">{{ name }}</h1>
         </div>
 
         <div class="d-flex responsive">
-          <img
-          :src=image
-            class="ms-2 me-3 rounded-circle img-fluid img-respon" alt="">
+          <img :src=image class="ms-2 me-3 rounded-circle img-fluid img-respon" alt="">
 
           <h1 class=" text-capitalize text-users">{{ name }}</h1>
         </div>
@@ -66,26 +66,19 @@ const name = auth.currentUser.displayName;
 
         <h4 class="account">Account Settings</h4>
 
-        <div class="mt-5 d-flex justify-content-between">
-
-          <h4 class="text">Edit profile </h4>
-          <Direction />
-
-        </div>
-
-        <div class="mt-3 d-flex justify-content-between">
-
-          <h4 class="text">Change password </h4>
-          <Direction />
-
-        </div>
-
         <div class="mt-3 d-flex justify-content-between">
 
           <h4 class="text">Add a payment method </h4>
           <Plus />
 
         </div>
+
+        <div class="mt-3 d-flex justify-content-between">
+          <button @click="toggleDark()" class="btn modedl">
+            <span class="ml-2">{{ isDark ? 'Dark 🌑' : 'Light ☀️' }}</span>
+          </button>
+        </div>
+
 
       </div>
 
@@ -120,6 +113,50 @@ const name = auth.currentUser.displayName;
 </template>
 
 <style scoped>
+.dark .text {
+  color: white;
+}
+
+.dark .modedl
+{
+  background: #7A60A9;
+  border: 3px solid #D6C8E1;
+  color: #20202d;
+}
+
+.dark .btn:focus {
+  border-color: #D6C8E1;
+  box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(32, 32, 45,1);;
+  outline: 0 none;
+}
+
+.modedl {
+  border: 3px solid #7A60A9;
+  color: #7A60A9;
+  background-color: #D6C8E1;
+  width: 167px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  margin-right: 9px;
+
+  /*Atributos del Texto*/
+  font-family: 'Comfortaa', cursive;
+  font-weight: 900;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
+  letter-spacing: 0.52px;
+  text-transform: uppercase;
+}
+
+.btn:focus {
+  border-color: rgb(122, 96, 169);
+  box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169, 0.6);
+  outline: 0 none;
+}
+
 .setting {
   justify-content: space-between;
 }
@@ -219,8 +256,7 @@ const name = auth.currentUser.displayName;
     display: flex;
   }
 
-  .responsive
-  {
+  .responsive {
     align-items: center;
   }
 

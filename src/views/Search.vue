@@ -124,6 +124,11 @@ export default {
 </template>
 
 <style scoped>
+.dark .busqueda
+{
+  background-color: #20202d;
+}
+
 .centrar {
   display: flex;
   flex-direction: column;
@@ -136,7 +141,7 @@ export default {
   font-family: Comfortaa;
   font-size: 36px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 900;
   line-height: normal;
   letter-spacing: -0.54px;
 }
@@ -146,7 +151,7 @@ export default {
   height: 55px;
   flex-shrink: 0;
   border: 2px solid #7A60A9;
-  background-color: #fff;
+  background-color: white;
 
   /*Atributos del texto*/
   color: #7A60A9;
@@ -168,7 +173,7 @@ export default {
   font-family: 'Comfortaa', cursive;
   font-size: 15px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 900;
   line-height: normal;
 }
 

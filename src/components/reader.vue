@@ -307,7 +307,7 @@ export default defineComponent({
               fill="#7A60A9" />
           </svg>
 
-          <span class="version">
+          <span class="version-reader">
             Pag. {{ pageNumber }}
           </span>
 
@@ -332,6 +332,15 @@ export default defineComponent({
 </template>
 
 <style scoped>
+.dark .header-read
+{
+  background: #2C2C20;
+}
+
+.dark #area
+{
+  color: white;
+}
 button {
   display: inline;
   padding: 0.5rem 1rem;
@@ -354,7 +363,7 @@ button {
   align-items: center;
 }
 
-.version {
+.version-reader {
   user-select: none;
   color: #7A60A9;
   font-family: 'Comfortaa', cursive;
@@ -437,7 +446,7 @@ button {
     height: 30px;
   }
 
-  .version {
+  .version-reader {
     font-size: 15px;
   }
 
@@ -470,7 +479,7 @@ button {
     height: 28px;
   }
 
-  .version {
+  .version-reader {
     font-size: 15px;
   }
 
@@ -504,7 +513,7 @@ button {
     height: 28px;
   }
 
-  .version {
+  .version-reader {
     font-size: 15px;
   }
 
