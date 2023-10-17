@@ -4,6 +4,10 @@ import { defineComponent, ref } from 'vue'
 import ePub from 'epubjs';
 import { getFirestore, collection, query, where, getDoc, doc, getDocs, setDoc, addDoc, and } from "firebase/firestore";;
 
+import { useDark} from '@vueuse/core'
+
+const isDark = useDark()
+
 const db = getFirestore();
 
 export default defineComponent({
@@ -127,6 +131,9 @@ export default defineComponent({
 
     },
     handleMarks(p) {
+
+      //console.log(this.book.archive)
+      //console.log(this.rendition)
       this.bookmark = this.IsMarked(p);
     },
 
@@ -193,6 +200,15 @@ export default defineComponent({
       flow: "paginated", spread: "none", allowScriptedContent: true, width: this.w, height: this.h
     });
 
+    if(isDark.value)
+    {
+      this.rendition.themes.default({ "body": { "color": "white !important"}});
+    }else
+    {
+      this.rendition.themes.default({ "body": { "color": "black !important"}});
+
+    }
+    
     if (this.lastPage[1] != 0) {
       var displayed = this.rendition.display(this.lastPage[0]);
       this.pageNumber = this.lastPage[1];
@@ -203,6 +219,12 @@ export default defineComponent({
       var displayed = this.rendition.display();
       this.pageNumber = 0;
     }
+    
+    //this.rendition.on('relocated', function(location) {
+    //  localStorage.setItem('bookMarker', location.start.cfi);
+    //  console.log(localStorage)
+    //});
+
   }
 })
 </script>
