@@ -149,7 +149,7 @@ export default defineComponent({
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
       // Redimensiona la vista del libro
-      this.rendition.resize(windowWidth, windowHeight)
+      this.rendition.resize(windowWidth)
 
 
     },
