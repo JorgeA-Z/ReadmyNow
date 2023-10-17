@@ -111,14 +111,8 @@ export default defineComponent({
 
 
     marcador() {
-      
-      this.rendition.on('relocated', function(location) {
-        localStorage.setItem('bookMarker', location.start.cfi);
-      });
 
-      let p = localStorage.getItem('bookMarker');
-      
-//      p = this.rendition.location.start.cfi;
+      let p = this.rendition.location.start.cfi;
 
       if (!this.IsMarked(p)) {
         this.marcadores.push(p);
@@ -155,7 +149,7 @@ export default defineComponent({
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
       // Redimensiona la vista del libro
-      this.rendition.resize(windowWidth)
+      this.rendition.resize(windowWidth, windowHeight)
 
 
     },
@@ -175,7 +169,7 @@ export default defineComponent({
     return {
 
       w: ref(window.innerWidth),
-      h: ref(667),
+      h: ref(window.innerHeight),
       pageNumber: ref(0),
       rendition: ref(),
       book: ref(),
