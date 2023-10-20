@@ -4,7 +4,7 @@ import { defineComponent, ref } from 'vue'
 import ePub from 'epubjs';
 import { getFirestore, collection, query, where, getDoc, doc, getDocs, setDoc, addDoc, and } from "firebase/firestore";;
 
-import { useDark} from '@vueuse/core'
+import { useDark } from '@vueuse/core'
 
 const isDark = useDark()
 
@@ -149,7 +149,7 @@ export default defineComponent({
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
       // Redimensiona la vista del libro
-      this.rendition.resize(windowWidth)
+      //this.rendition.resize(windowWidth)
 
 
     },
@@ -164,23 +164,66 @@ export default defineComponent({
       return tiempoEnLaPagina
 
     },
+    changeReader() {
+      this.reader = !this.reader
+
+      switch (this.reader) {
+        case true:
+          this.rendition.spread("none")
+        break;
+        case false:
+          this.rendition.spread("auto")
+        break;
+      }
+    },
+    changeFont()
+    {
+      if(this.font == 4)
+      {
+        this.font = 0;
+
+      }else
+      {
+        this.font = this.font + 1;
+      }
+
+      switch(this.font)
+      {
+        case 0:
+          this.rendition.themes.default({ "p": { "font-size": "10px" } });
+          break;
+        case 1:
+          this.rendition.themes.default({ "p": { "font-size": "15px" } });
+          break;
+        case 2:
+          this.rendition.themes.default({ "p": { "font-size": "20px" } });
+          break;
+        case 3:
+          this.rendition.themes.default({ "p": { "font-size": "25px" } });
+        break;
+        case 4:
+          this.rendition.themes.default({ "p": { "font-size": "30px" } });
+        break;
+      }
+    }
   },
   data() {
     return {
-
-      w: ref(window.innerWidth),
-      h: ref(window.innerHeight),
+      w: ref(900),
+      h: ref(600),
       pageNumber: ref(0),
       rendition: ref(),
       book: ref(),
       horaEntrada: ref(),
       bookmark: ref(false),
+      reader: ref(true),
+      font: ref(1)
     };
   },
 
   created() {
     // Agregar un event listener para el evento de redimensionamiento de la ventana
-    window.addEventListener('resize', this.handleResize);
+    // window.addEventListener('resize', this.handleResize);
 
     this.horaEntrada = new Date();
 
@@ -188,22 +231,24 @@ export default defineComponent({
   },
   beforeDestroy() {
     // Asegurarse de quitar el event listener cuando el componente se destruye para evitar fugas de memoria
-    window.removeEventListener('resize', this.handleResize);
+    //window.removeEventListener('resize', this.handleResize);
 
   },
   mounted() {
     this.book = ePub(this.link);
+
+
     this.rendition = this.book.renderTo("area", {
       manager: "continuous",
-      flow: "paginated", spread: "none", allowScriptedContent: true, width: this.w, height: this.h
+      flow: "paginated", spread: "none", allowScriptedContent: true, width: "100%", height: "100%"
     });
 
-    if(isDark.value)
-    {
-      this.rendition.themes.default({ "body": { "color": "white !important"}});
-    }else
-    {
-      this.rendition.themes.default({ "body": { "color": "black !important"}});
+    this.rendition.themes.default({ "p": { "font-size": "15px" } });
+
+    if (isDark.value) {
+      this.rendition.themes.default({ "body": { "color": "white !important" } });
+    } else {
+      this.rendition.themes.default({ "body": { "color": "black !important" } });
 
     }
 
@@ -271,24 +316,6 @@ export default defineComponent({
 
         </div>
 
-
-        <!-- Icono para marcar libro -->
-
-        <!--
-        <svg v-if="bookmark" @click="marcador" xmlns="http://www.w3.org/2000/svg" width="40" height="35"
-          viewBox="0 0 40 35" fill="#7A60A9" class="marcador">
-          <path
-            d="M6.66663 11.375C6.66663 8.92477 6.66663 7.69966 7.21159 6.76379C7.69096 5.94058 8.45586 5.27129 9.39667 4.85185C10.4662 4.375 11.8664 4.375 14.6666 4.375H25.3333C28.1336 4.375 29.5337 4.375 30.6032 4.85185C31.5441 5.27129 32.309 5.94058 32.7883 6.76379C33.3333 7.69966 33.3333 8.92477 33.3333 11.375V30.625L28.75 27.7083L24.5833 30.625L20 27.7083L15.4166 30.625L11.25 27.7083L6.66663 30.625V11.375Z"
-            stroke="#7A60A9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-
-        <svg v-else @click="marcador" xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 40 35"
-          fill="none" class="marcador">
-          <path
-            d="M6.66663 11.375C6.66663 8.92477 6.66663 7.69966 7.21159 6.76379C7.69096 5.94058 8.45586 5.27129 9.39667 4.85185C10.4662 4.375 11.8664 4.375 14.6666 4.375H25.3333C28.1336 4.375 29.5337 4.375 30.6032 4.85185C31.5441 5.27129 32.309 5.94058 32.7883 6.76379C33.3333 7.69966 33.3333 8.92477 33.3333 11.375V30.625L28.75 27.7083L24.5833 30.625L20 27.7083L15.4166 30.625L11.25 27.7083L6.66663 30.625V11.375Z"
-            stroke="#7A60A9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>-->
-
         <div class="m-0">
 
           <svg v-if="bookmark" @click="marcador" xmlns="http://www.w3.org/2000/svg" width="50" height="41"
@@ -339,30 +366,26 @@ export default defineComponent({
 
   <!-- Lector Epub -->
   <div class="lector">
-
-    <div id="area"></div>
-
+    <div id="area" class="spreads"></div>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-primary" @click="changeReader">Cambiar vista</button>
+      <button type="button" class="btn btn-primary" @click="changeFont">Cambiar letra</button>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.dark .header-read
-{
+#area {
+  width: 900px;
+  height: 600px;
+  padding: 10px 10px 0px 10px;
+  margin: 5px auto;
+}
+
+.dark .header-read {
   background: #2C2C20;
 }
 
-.dark #area
-{
-  color: white;
-}
-button {
-  display: inline;
-  padding: 0.5rem 1rem;
-  margin: 0 auto;
-  text-decoration: none;
-  border: none;
-  background-color: white;
-}
 
 .cruz {
   display: flex;
@@ -434,6 +457,15 @@ button {
 }
 
 @media screen and (max-width: 760px) {
+  #area {
+    width: 450px;
+    height: 500px;
+  }
+
+  #area iframe {
+    pointer-events: none;
+  }
+
   .equis {
     width: 30px;
     height: 30px;
@@ -467,6 +499,15 @@ button {
 }
 
 @media screen and (max-width: 525px) {
+  #area {
+    width: 450px;
+    height: 500px;
+  }
+
+  #area iframe {
+    pointer-events: none;
+  }
+  
   .equis {
     width: 25px;
     height: 25px;
@@ -500,6 +541,15 @@ button {
 }
 
 @media screen and (max-width: 480px) {
+  #area {
+    width: 400px;
+    height: 500px;
+  }
+
+  #area iframe {
+    pointer-events: none;
+  }
+
 
   .equis {
     width: 25px;
