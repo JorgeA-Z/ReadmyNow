@@ -150,6 +150,7 @@ export default defineComponent({
       var windowHeight = window.innerHeight;
       // Redimensiona la vista del libro
       //this.rendition.resize(windowWidth)
+      this.handleTheme();
 
 
     },
@@ -170,25 +171,21 @@ export default defineComponent({
       switch (this.reader) {
         case true:
           this.rendition.spread("none")
-        break;
+          break;
         case false:
           this.rendition.spread("auto")
-        break;
+          break;
       }
     },
-    changeFont()
-    {
-      if(this.font == 4)
-      {
+    changeFont() {
+      if (this.font == 4) {
         this.font = 0;
 
-      }else
-      {
+      } else {
         this.font = this.font + 1;
       }
 
-      switch(this.font)
-      {
+      switch (this.font) {
         case 0:
           this.rendition.themes.default({ "p": { "font-size": "10px" } });
           break;
@@ -200,10 +197,18 @@ export default defineComponent({
           break;
         case 3:
           this.rendition.themes.default({ "p": { "font-size": "25px" } });
-        break;
+          break;
         case 4:
           this.rendition.themes.default({ "p": { "font-size": "30px" } });
-        break;
+          break;
+      }
+    },
+    handleTheme() {
+      if (isDark.value) {
+        this.rendition.themes.default({ "body": { "color": "white !important" } });
+      } else {
+        this.rendition.themes.default({ "body": { "color": "black !important" } });
+
       }
     }
   },
@@ -223,7 +228,7 @@ export default defineComponent({
 
   created() {
     // Agregar un event listener para el evento de redimensionamiento de la ventana
-    // window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', this.handleResize);
 
     this.horaEntrada = new Date();
 
@@ -231,7 +236,7 @@ export default defineComponent({
   },
   beforeDestroy() {
     // Asegurarse de quitar el event listener cuando el componente se destruye para evitar fugas de memoria
-    //window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', this.handleResize);
 
   },
   mounted() {
@@ -245,12 +250,7 @@ export default defineComponent({
 
     this.rendition.themes.default({ "p": { "font-size": "15px" } });
 
-    if (isDark.value) {
-      this.rendition.themes.default({ "body": { "color": "white !important" } });
-    } else {
-      this.rendition.themes.default({ "body": { "color": "black !important" } });
-
-    }
+    this.handleTheme()
 
     if (this.lastPage[1] != 0) {
       var displayed = this.rendition.display(this.lastPage[0]);
@@ -507,7 +507,7 @@ export default defineComponent({
   #area iframe {
     pointer-events: none;
   }
-  
+
   .equis {
     width: 25px;
     height: 25px;
