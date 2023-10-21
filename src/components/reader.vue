@@ -129,9 +129,6 @@ export default defineComponent({
 
     },
     handleMarks(p) {
-
-      //console.log(this.book.archive)
-      //console.log(this.rendition)
       this.bookmark = this.IsMarked(p);
     },
 
@@ -210,7 +207,15 @@ export default defineComponent({
         this.rendition.themes.default({ "body": { "color": "black !important" } });
 
       }
-    }
+    },
+    handleSwipe()
+    {
+
+    },
+    addBookmark() {
+
+
+    },
   },
   data() {
     return {
@@ -248,7 +253,7 @@ export default defineComponent({
       flow: "paginated", spread: "none", allowScriptedContent: true, width: "100%", height: "100%"
     });
 
-    this.rendition.themes.default({ "p": { "font-size": "15px" } });
+    this.rendition.themes.default({ "p": { "font-size": "15px"} });
 
     this.handleTheme()
 
