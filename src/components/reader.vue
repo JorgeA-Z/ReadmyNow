@@ -208,8 +208,7 @@ export default defineComponent({
 
       }
     },
-    handleSwipe()
-    {
+    handleSwipe() {
 
     },
     addBookmark() {
@@ -253,7 +252,7 @@ export default defineComponent({
       flow: "paginated", spread: "none", allowScriptedContent: true, width: "100%", height: "100%"
     });
 
-    this.rendition.themes.default({ "p": { "font-size": "15px"} });
+    this.rendition.themes.default({ "p": { "font-size": "15px" } });
 
     this.handleTheme()
 
@@ -372,11 +371,98 @@ export default defineComponent({
   <!-- Lector Epub -->
   <div class="lector">
     <div id="area" class="spreads"></div>
+    <!--
     <div class="btn-group" role="group">
       <button type="button" class="btn btn-primary" @click="changeReader">Cambiar vista</button>
       <button type="button" class="btn btn-primary" @click="changeFont">Cambiar letra</button>
-    </div>
+    </div>-->
   </div>
+
+  <!-- Extra Functions -->
+  <footer class="extras">
+    <div class="d-flex contenedor">
+
+      <!-- Reader 2 page -->
+      <div>
+
+        <button class="botonesLector">
+          <svg xmlns="http://www.w3.org/2000/svg" width="38" height="47" viewBox="0 0 49 54" fill="none"
+            class="dosPaginas">
+            <g clip-path="url(#clip0_400_445)">
+              <path
+                d="M47.656 5.80957H1.34396C0.602098 5.80957 0 6.50997 0 7.37296V42.3059C0 43.1529 0.602098 43.8693 1.34396 43.8693H17.8638C18.6057 43.8693 19.2078 44.5697 19.2078 45.4164V50.188C19.2078 51.051 19.7539 51.4255 20.412 51.0346L23.31 49.2596C23.9681 48.8686 25.046 48.8686 25.7041 49.2596L27.5382 50.3833L28.6023 51.0346C29.2044 51.3928 29.7084 51.0997 29.7784 50.3833C29.7925 50.3182 29.7925 50.2531 29.7925 50.188V45.4164C29.7925 44.5694 30.3946 43.8693 31.1364 43.8693H47.6563C48.3985 43.8693 49.0003 43.1529 49.0003 42.3059V7.37296C49 6.50997 48.3982 5.80957 47.656 5.80957ZM4.52206 40.4658C3.79426 40.4658 3.1781 39.7494 3.1781 38.9024V10.7932C3.1781 9.92986 3.79398 9.22979 4.52206 9.22979H20.5802C21.3361 9.22979 21.9241 9.93019 21.9241 10.7932V38.9024C21.9241 39.3421 21.7562 39.7654 21.4902 40.0425C21.2523 40.3032 20.9444 40.4658 20.5802 40.4658H4.52206ZM45.8222 38.9024C45.8222 39.749 45.2201 40.4658 44.4782 40.4658H28.4201C27.6782 40.4658 27.0902 39.7494 27.0902 38.9024V10.7932C27.0902 9.92986 27.6782 9.22979 28.4201 9.22979H44.4782C45.2201 9.22979 45.8222 9.93019 45.8222 10.7932V38.9024Z"
+                fill="#7A60A9" />
+              <path
+                d="M16.7859 28.0233C16.7859 28.4957 16.604 28.919 16.3239 29.1961C16.0859 29.4404 15.7921 29.587 15.4557 29.587H9.66C8.91786 29.587 8.31604 28.8866 8.31604 28.0236C8.31604 27.4047 8.62398 26.8675 9.08603 26.6231C9.25392 26.5253 9.44993 26.4766 9.66 26.4766H15.456C15.7921 26.4766 16.0859 26.6068 16.3241 26.8675C16.604 27.1279 16.7859 27.5512 16.7859 28.0233Z"
+                fill="#7A60A9" />
+              <path
+                d="M16.7859 21.6554C16.7859 22.1278 16.604 22.5511 16.3239 22.8279C16.0859 23.0723 15.778 23.2188 15.4419 23.2188H9.64594C8.91786 23.2188 8.31604 22.5184 8.31604 21.6554C8.31604 20.7921 8.91814 20.1084 9.64594 20.1084H15.4419C15.778 20.1084 16.0859 20.255 16.3239 20.4993C16.604 20.7758 16.7859 21.183 16.7859 21.6554Z"
+                fill="#7A60A9" />
+              <path
+                d="M40.6981 28.0236C40.6981 28.496 40.5161 28.9357 40.222 29.2124C39.984 29.4404 39.6899 29.587 39.3541 29.587H33.5581C33.222 29.587 32.9282 29.4404 32.6902 29.2124C32.3964 28.9353 32.2144 28.496 32.2144 28.0236C32.2144 27.5676 32.3823 27.1606 32.6483 26.8999C32.7603 26.7697 32.8722 26.6719 33.0122 26.6231C33.1801 26.5253 33.3624 26.4766 33.5581 26.4766H39.3541C39.6902 26.4766 39.984 26.6068 40.222 26.8511C40.5161 27.1282 40.6981 27.5515 40.6981 28.0236Z"
+                fill="#7A60A9" />
+              <path
+                d="M40.684 21.6558C40.684 22.1281 40.502 22.5515 40.2219 22.8282C39.984 23.0726 39.6899 23.2191 39.3541 23.2191H33.5581C33.1801 23.2191 32.844 23.0399 32.6061 22.7631C32.3682 22.47 32.2141 22.0791 32.2141 21.6558C32.2141 21.151 32.4101 20.7113 32.7321 20.4342C32.956 20.2226 33.2501 20.1084 33.5581 20.1084H39.3541C39.6901 20.1084 39.984 20.255 40.2219 20.4993C40.502 20.7761 40.684 21.1834 40.684 21.6558Z"
+                fill="#7A60A9" />
+            </g>
+            <defs>
+              <clipPath id="clip0_400_445">
+                <rect width="49" height="57" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </button>
+
+      </div>
+
+      <!-- input range -->
+      <div class="d-flex contenedor">
+
+        <div>
+          <span class="letraMinuscula">A</span>
+        </div>
+
+        <div>
+          <input type="range" min="1" max="5" value="1">
+        </div>
+        <div>
+          <span class="letraMayuscula">A</span>
+        </div>
+
+      </div>
+
+      <!-- Reader 1 page -->
+      <div>
+
+        <button class="botonesLector">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="33" viewBox="0 0 42 35" fill="none"
+            class="unaPagina">
+            <path
+              d="M34.3742 8.36426C33.3799 8.36426 32.5743 9.03618 32.5743 9.86418V33.5C32.5743 34.3282 33.3799 34.9999 34.3742 34.9999C35.3686 34.9999 36.1742 34.328 36.1742 33.5V9.86418C36.1742 9.03598 35.3686 8.36426 34.3742 8.36426Z"
+              fill="#7A60A9" />
+            <path
+              d="M39.0096 13.04C38.0153 13.04 37.2097 13.712 37.2097 14.54V33.5C37.2097 34.3282 38.0153 34.9999 39.0096 34.9999C40.0039 34.9999 40.8095 34.328 40.8095 33.5V14.54C40.8095 13.712 40.0039 13.04 39.0096 13.04Z"
+              fill="#7A60A9" />
+            <path
+              d="M21.5056 10.1504H10.4907C9.49638 10.1504 8.6908 10.8223 8.6908 11.6503C8.6908 12.4783 9.49638 13.1502 10.4907 13.1502H21.5059C22.5002 13.1502 23.3058 12.4783 23.3058 11.6503C23.3058 10.8223 22.5 10.1504 21.5056 10.1504Z"
+              fill="#7A60A9" />
+            <path
+              d="M21.5056 16H10.4907C9.49638 16 8.6908 16.6719 8.6908 17.4999C8.6908 18.3279 9.49638 18.9998 10.4907 18.9998H21.5059C22.5002 18.9998 23.3058 18.3279 23.3058 17.4999C23.3058 16.6719 22.5 16 21.5056 16Z"
+              fill="#7A60A9" />
+            <path
+              d="M18.0475 21.8496H10.6741C9.67973 21.8496 8.87415 22.5215 8.87415 23.3495C8.87415 24.1775 9.67973 24.8495 10.6741 24.8495H18.0475C19.0418 24.8495 19.8474 24.1775 19.8474 23.3495C19.8474 22.5215 19.0418 21.8496 18.0475 21.8496Z"
+              fill="#7A60A9" />
+            <path
+              d="M27.163 0H5.18496C2.9825 0 1.19055 1.49309 1.19055 3.32807V31.6719C1.19055 33.5069 2.98226 35 5.18496 35H27.163C29.3655 35 31.1574 33.5069 31.1574 31.6719V3.32807C31.1572 1.49309 29.3655 0 27.163 0ZM27.5574 31.6719C27.5574 31.8525 27.3804 32 27.163 32H5.18496C4.96754 32 4.79061 31.8525 4.79061 31.6719V3.32807C4.79061 3.14749 4.96754 3.00005 5.18496 3.00005H27.163C27.3804 3.00005 27.5574 3.14749 27.5574 3.32807V31.6719Z"
+              fill="#7A60A9" />
+          </svg>
+        </button>
+
+      </div>
+
+    </div>
+
+  </footer>
 </template>
 
 <style scoped>
@@ -461,6 +547,141 @@ export default defineComponent({
   text-align: center;
 }
 
+/* Footer */
+.extras {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #F7F7F7;
+  height: 58px;
+  padding: 5px 10%;
+  z-index: 99;
+}
+
+.dark .extras {
+  background: #2C2C20;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 300px;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 11px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 1px 1px 1px #7A60A9;
+  background: #D6C8E1;
+  border-radius: 1px;
+  border: 0px solid #7A60A9;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #7A60A9;
+  border: 1px solid #D6C8E1;
+  height: 26px;
+  width: 26px;
+  border-radius: 15px;
+  background: #7A60A9;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -8px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #D6C8E1;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 11px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 1px 1px 1px #7A60A9;
+  background: #D6C8E1;
+  border-radius: 1px;
+  border: 0px solid #7A60A9;
+}
+
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #7A60A9;
+  border: 1px solid #D6C8E1;
+  height: 26px;
+  width: 26px;
+  border-radius: 15px;
+  background: #7A60A9;
+  cursor: pointer;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 11px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range]::-ms-fill-lower {
+  background: #D6C8E1;
+  border: 0px solid #7A60A9;
+  border-radius: 2px;
+  box-shadow: 1px 1px 1px #7A60A9;
+}
+
+input[type=range]::-ms-fill-upper {
+  background: #D6C8E1;
+  border: 0px solid #7A60A9;
+  border-radius: 2px;
+  box-shadow: 1px 1px 1px #7A60A9;
+}
+
+input[type=range]::-ms-thumb {
+  margin-top: 1px;
+  box-shadow: 1px 1px 1px #7A60A9;
+  border: 1px solid #D6C8E1;
+  height: 26px;
+  width: 26px;
+  border-radius: 15px;
+  background: #7A60A9;
+  cursor: pointer;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+  background: #D6C8E1;
+}
+
+input[type=range]:focus::-ms-fill-upper {
+  background: #D6C8E1;
+}
+
+.letraMinuscula {
+  font-size: 20px;
+  font-weight: 600;
+  color: #7A60A9;
+  margin-right: 15px;
+}
+
+.letraMayuscula {
+  font-size: 30px;
+  font-weight: 600;
+  color: #7A60A9;
+  margin-left: 15px;
+}
+
+.botonesLector {
+  background-color: transparent;
+  border: transparent;
+}
+
+/* Responsive mode */
 @media screen and (max-width: 760px) {
   #area {
     width: 450px;
@@ -499,6 +720,27 @@ export default defineComponent({
 
   .version-reader {
     font-size: 15px;
+  }
+
+  /* Footer */
+
+  .extras {
+    transition: .3s;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 200px;
+  }
+
+  .dosPaginas {
+    width: 35px;
+    height: 44px;
+  }
+
+  .unaPagina {
+    width: 37px;
+    height: 30px;
   }
 
 }
@@ -543,6 +785,27 @@ export default defineComponent({
     font-size: 15px;
   }
 
+  /* Footer */
+
+  .extras {
+    transition: .3s;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 175px;
+  }
+
+  .dosPaginas {
+    width: 32px;
+    height: 41px;
+  }
+
+  .unaPagina {
+    width: 34px;
+    height: 26px;
+  }
+
 }
 
 @media screen and (max-width: 480px) {
@@ -584,6 +847,25 @@ export default defineComponent({
 
   .version-reader {
     font-size: 15px;
+  }
+
+  .extras {
+    transition: .3s;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 120px;
+  }
+
+  .dosPaginas {
+    width: 32px;
+    height: 41px;
+  }
+
+  .unaPagina {
+    width: 34px;
+    height: 26px;
   }
 
 }
