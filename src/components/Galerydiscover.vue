@@ -381,7 +381,8 @@ export default defineComponent({
                         class="mx-2 corazon">
                         <path
                             d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
-                            stroke="red" fill="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            stroke="#7A60A9" fill="#7A60A9" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                     <span class="likes">100</span>
 
@@ -412,7 +413,6 @@ export default defineComponent({
 
 /* Simbolo abrir */
 .open {
-    user-select: none;
     position: absolute;
     right: 5%;
     top: 7%;
@@ -425,7 +425,6 @@ export default defineComponent({
 
 /* Corazon y Likes */
 .corazon {
-    user-select: none;
     position: absolute;
     top: 4%;
     left: 8%;
@@ -441,8 +440,7 @@ article:hover .corazon {
 }
 
 .likes {
-    user-select: none;
-    color: black;
+    color: #D6C8E1;
     font-family: 'Comfortaa', cursive;
     font-size: 17px;
     font-style: normal;
@@ -466,7 +464,6 @@ article:hover .likes {
 
 /* DIV CONTENEDOR DE TITULO Y AUTOR */
 .titulo {
-    user-select: none;
     color: #7A60A9;
     font-family: 'Comfortaa', cursive;
     font-size: 11px;
@@ -477,7 +474,6 @@ article:hover .likes {
 }
 
 .autor {
-    user-select: none;
     color: #D6C8E1;
     font-family: 'Comfortaa', cursive;
     font-size: 11px;
@@ -489,7 +485,6 @@ article:hover .likes {
 }
 
 .contenedorLibro {
-    user-select: none;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -510,20 +505,27 @@ article:hover .contenedorLibro {
 /* Animation de la card*/
 
 article {
-    user-select: none;
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer */
+    -khtml-user-select: none;
+    /* KHTML browsers (e.g. Konqueror) */
+    -webkit-user-select: none;
+    /* Chrome, Safari, and Opera */
+    -webkit-touch-callout: none;
+    /* Disable Android and iOS callouts*/
     position: relative;
     transition: all .3s ease;
 }
 
 article img:first-child {
-    user-select: none;
     box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169, 0.6);
     border-radius: 4px;
     object-fit: cover;
 }
 
 article img:last-child {
-    user-select: none;
     object-fit: cover;
     position: absolute;
     top: 15%;
@@ -628,5 +630,4 @@ article:active img:last-child {
         top: 9%;
         left: 15.2%;
     }
-}
-</style>
+}</style>
