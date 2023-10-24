@@ -434,11 +434,6 @@ export default defineComponent({
     opacity: 0;
 }
 
-article:hover .corazon {
-    opacity: 1;
-    transform: translateY(10%);
-}
-
 .likes {
     color: #D6C8E1;
     font-family: 'Comfortaa', cursive;
@@ -455,11 +450,6 @@ article:hover .corazon {
     transform: translateY(25%);
     transition: .3s ease;
     opacity: 0;
-}
-
-article:hover .likes {
-    opacity: 1;
-    transform: translateY(10%);
 }
 
 /* DIV CONTENEDOR DE TITULO Y AUTOR */
@@ -497,13 +487,7 @@ article:hover .likes {
     text-align: center;
 }
 
-article:hover .contenedorLibro {
-    opacity: 1;
-    transform: translateY(10%);
-}
-
 /* Animation de la card*/
-
 article {
     -moz-user-select: none;
     /* Firefox */
@@ -574,10 +558,21 @@ article:hover img:last-child {
     transform: translateY(10%);
 }
 
-article:hover svg:last-child {
+article:hover .contenedorLibro {
     opacity: 1;
     transform: translateY(10%);
 }
+
+article:hover .likes {
+    opacity: 1;
+    transform: translateY(10%);
+}
+
+article:hover .corazon {
+    opacity: 1;
+    transform: translateY(10%);
+}
+
 
 /* Active */
 
@@ -591,6 +586,21 @@ article:active::before {
 }
 
 article:active img:last-child {
+    opacity: 1;
+    transform: translateY(10%);
+}
+
+article:active .contenedorLibro {
+    opacity: 1;
+    transform: translateY(10%);
+}
+
+article:active .likes {
+    opacity: 1;
+    transform: translateY(10%);
+}
+
+article:active .corazon {
     opacity: 1;
     transform: translateY(10%);
 }
@@ -630,4 +640,5 @@ article:active img:last-child {
         top: 9%;
         left: 15.2%;
     }
-}</style>
+}
+</style>
