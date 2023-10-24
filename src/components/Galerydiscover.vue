@@ -412,6 +412,7 @@ export default defineComponent({
 
 /* Simbolo abrir */
 .open {
+    user-select: none;
     position: absolute;
     right: 5%;
     top: 7%;
@@ -424,6 +425,7 @@ export default defineComponent({
 
 /* Corazon y Likes */
 .corazon {
+    user-select: none;
     position: absolute;
     top: 4%;
     left: 8%;
@@ -439,6 +441,7 @@ article:hover .corazon {
 }
 
 .likes {
+    user-select: none;
     color: black;
     font-family: 'Comfortaa', cursive;
     font-size: 17px;
@@ -463,6 +466,7 @@ article:hover .likes {
 
 /* DIV CONTENEDOR DE TITULO Y AUTOR */
 .titulo {
+    user-select: none;
     color: #7A60A9;
     font-family: 'Comfortaa', cursive;
     font-size: 11px;
@@ -473,6 +477,7 @@ article:hover .likes {
 }
 
 .autor {
+    user-select: none;
     color: #D6C8E1;
     font-family: 'Comfortaa', cursive;
     font-size: 11px;
@@ -484,6 +489,7 @@ article:hover .likes {
 }
 
 .contenedorLibro {
+    user-select: none;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -510,12 +516,14 @@ article {
 }
 
 article img:first-child {
+    user-select: none;
     box-shadow: 0 1px 1px rgba(122, 96, 169, 0.075)inset, 0 0 8px rgba(122, 96, 169, 0.6);
     border-radius: 4px;
     object-fit: cover;
 }
 
 article img:last-child {
+    user-select: none;
     object-fit: cover;
     position: absolute;
     top: 15%;
@@ -533,18 +541,6 @@ article img:last-child {
     border-radius: 50%;
     border: 3px solid #7A60A9;
 
-}
-
-article svg:last-child {
-    position: absolute;
-    top: 100px;
-    bottom: 0;
-    left: 0;
-    right: 0%;
-    margin: auto;
-    transform: translateY(25%);
-    transition: .3s ease;
-    opacity: 0;
 }
 
 article:hover {
