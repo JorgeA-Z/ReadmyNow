@@ -529,7 +529,7 @@ article img:last-child {
 
 }
 
-article:hover {
+article:hover, article:focus {
     transform:
         perspective(250px) rotateX(10deg) translateY(-5%) translateZ(0);
 }
@@ -549,26 +549,26 @@ article::before {
     transition: all .3s ease;
 }
 
-article:hover::before {
+article:hover::before, article:focus::before {
     opacity: 1;
 }
 
-article:hover img:last-child {
-    opacity: 1;
-    transform: translateY(10%);
-}
-
-article:hover .contenedorLibro {
+article:hover img:last-child, article:focus img:last-child {
     opacity: 1;
     transform: translateY(10%);
 }
 
-article:hover .likes {
+article:hover .contenedorLibro, article:focus .contenedorLibro {
     opacity: 1;
     transform: translateY(10%);
 }
 
-article:hover .corazon {
+article:hover .likes, article:focus .likes {
+    opacity: 1;
+    transform: translateY(10%);
+}
+
+article:hover .corazon, article:focus .corazon {
     opacity: 1;
     transform: translateY(10%);
 }
