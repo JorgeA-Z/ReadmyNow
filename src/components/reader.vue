@@ -215,6 +215,10 @@ export default defineComponent({
 
 
     },
+    reloadPage() {
+    window.location.reload();
+  }
+
   },
   data() {
     return {
@@ -278,9 +282,7 @@ export default defineComponent({
     <nav>
       <div class="d-flex m-1 contenedor">
 
-        <div class="cruz">
-
-          <router-link to="/Discover">
+        <div class="cruz" @click="reloadPage">
             <!-- Icono perteneciente para volver -->
             <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" fill="none"
               class="equis">
@@ -295,7 +297,6 @@ export default defineComponent({
                 </clipPath>
               </defs>
             </svg>
-          </router-link>
 
         </div>
 
@@ -417,10 +418,6 @@ export default defineComponent({
         <div>
           <span class="letraMinuscula">A</span>
         </div>
-
-        <div>
-          <input type="range" min="1" max="5" value="1">
-        </div>
         <div>
           <span class="letraMayuscula">A</span>
         </div>
@@ -535,7 +532,6 @@ export default defineComponent({
 /* lector epub */
 .lector {
   margin-top: 65px;
-  right: 50%;
   width: 100%;
 }
 
@@ -580,105 +576,6 @@ export default defineComponent({
   margin-left: 15px;
 }
 
-input[type=range] {
-  -webkit-appearance: none;
-  width: 300px;
-}
-
-input[type=range]:focus {
-  outline: none;
-}
-
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 11px;
-  cursor: pointer;
-  animate: 0.2s;
-  box-shadow: 1px 1px 1px #7A60A9;
-  background: #D6C8E1;
-  border-radius: 1px;
-  border: 0px solid #7A60A9;
-}
-
-input[type=range]::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px #7A60A9;
-  border: 1px solid #D6C8E1;
-  height: 26px;
-  width: 26px;
-  border-radius: 15px;
-  background: #7A60A9;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -8px;
-}
-
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #D6C8E1;
-}
-
-input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 11px;
-  cursor: pointer;
-  animate: 0.2s;
-  box-shadow: 1px 1px 1px #7A60A9;
-  background: #D6C8E1;
-  border-radius: 1px;
-  border: 0px solid #7A60A9;
-}
-
-input[type=range]::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #7A60A9;
-  border: 1px solid #D6C8E1;
-  height: 26px;
-  width: 26px;
-  border-radius: 15px;
-  background: #7A60A9;
-  cursor: pointer;
-}
-
-input[type=range]::-ms-track {
-  width: 100%;
-  height: 11px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-
-input[type=range]::-ms-fill-lower {
-  background: #D6C8E1;
-  border: 0px solid #7A60A9;
-  border-radius: 2px;
-  box-shadow: 1px 1px 1px #7A60A9;
-}
-
-input[type=range]::-ms-fill-upper {
-  background: #D6C8E1;
-  border: 0px solid #7A60A9;
-  border-radius: 2px;
-  box-shadow: 1px 1px 1px #7A60A9;
-}
-
-input[type=range]::-ms-thumb {
-  margin-top: 1px;
-  box-shadow: 1px 1px 1px #7A60A9;
-  border: 1px solid #D6C8E1;
-  height: 26px;
-  width: 26px;
-  border-radius: 15px;
-  background: #7A60A9;
-  cursor: pointer;
-}
-
-input[type=range]:focus::-ms-fill-lower {
-  background: #D6C8E1;
-}
-
-input[type=range]:focus::-ms-fill-upper {
-  background: #D6C8E1;
-}
 
 /* Responsive mode */
 @media screen and (max-width: 760px) {
@@ -726,12 +623,6 @@ input[type=range]:focus::-ms-fill-upper {
   .extras {
     transition: .3s;
   }
-
-  input[type=range] {
-    -webkit-appearance: none;
-    width: 200px;
-  }
-
   .dosPaginas {
     width: 35px;
     height: 44px;
@@ -789,12 +680,6 @@ input[type=range]:focus::-ms-fill-upper {
   .extras {
     transition: .3s;
   }
-
-  input[type=range] {
-    -webkit-appearance: none;
-    width: 175px;
-  }
-
   .dosPaginas {
     width: 32px;
     height: 41px;
@@ -850,11 +735,6 @@ input[type=range]:focus::-ms-fill-upper {
 
   .extras {
     transition: .3s;
-  }
-
-  input[type=range] {
-    -webkit-appearance: none;
-    width: 120px;
   }
 
   .dosPaginas {
