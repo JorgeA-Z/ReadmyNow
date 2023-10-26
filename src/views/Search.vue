@@ -184,11 +184,12 @@ export default {
 .text {
   color: #7A60A9;
   font-family: 'Comfortaa', cursive;
-  font-size: 13px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 900;
   line-height: normal;
   letter-spacing: 0.52px;
   text-transform: uppercase;
+  margin-left: 30px;
 }
 </style>

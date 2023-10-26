@@ -46,15 +46,18 @@ export default defineComponent({
                 </span>
                 <router-link class="link" :to="'/Abook/' + b.ID">
                     
-                    <!-- CORAZON Y lIKES-->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="42" viewBox="0 0 22 20" fill="none"
-                        class="mx-2 corazon">
-                        <path
-                            d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
-                            stroke="#7A60A9" fill="#7A60A9" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                    <span class="likes">{{b.TiempoGlobal}}</span>
+                    <!-- OJO Y VISTAS-->
+                    <div class="views">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <path
+                                d="M19.5 5C15.489 5.00584 11.5936 6.48486 8.42582 9.20459C5.25809 11.9243 2.99772 15.7305 2 20.025C3.00624 24.3102 5.27027 28.1052 8.43722 30.8152C11.6042 33.5252 15.495 34.997 19.5 35C23.511 34.9942 27.4064 33.5151 30.5742 30.7954C33.7419 28.0757 36.0023 24.2695 37 19.975C35.9938 15.6898 33.7297 11.8948 30.5628 9.18482C27.3958 6.47481 23.505 5.00298 19.5 5ZM19.5 10C21.8992 10 24.2002 11.0536 25.8967 12.9289C27.5932 14.8043 28.5463 17.3478 28.5463 20C28.5463 22.6522 27.5932 25.1957 25.8967 27.0711C24.2002 28.9464 21.8992 30 19.5 30C17.1008 30 14.7998 28.9464 13.1033 27.0711C11.4068 25.1957 10.4537 22.6522 10.4537 20C10.4537 17.3478 11.4068 14.8043 13.1033 12.9289C14.7998 11.0536 17.1008 10 19.5 10Z"
+                                fill="#7A60A9" />
+                            <path
+                                d="M24.0231 20C24.0231 21.3261 23.5466 22.5979 22.6983 23.5355C21.8501 24.4732 20.6996 25 19.5 25C18.3004 25 17.1499 24.4732 16.3017 23.5355C15.4534 22.5979 14.9769 21.3261 14.9769 20C14.9769 18.6739 15.4534 17.4021 16.3017 16.4645C17.1499 15.5268 18.3004 15 19.5 15C20.6996 15 21.8501 15.5268 22.6983 16.4645C23.5466 17.4021 24.0231 18.6739 24.0231 20Z"
+                                fill="#7A60A9" />
+                        </svg>
+                        <span class="likes">{{ b.TiempoGlobal }}</span>
+                    </div>
 
 
                     <!-- TITULO Y AUTOR -->
@@ -94,15 +97,18 @@ export default defineComponent({
     visibility: hidden;
 }
 
-/* Corazon y Likes */
-.corazon {
+/* Ojo y Likes */
+.views {
     position: absolute;
-    top: 4%;
-    left: 8%;
+    top: 3%;
+    left: 12%;
     margin: auto;
     transform: translateY(10%);
     transition: .3s ease;
     opacity: 0;
+
+    align-self: center;
+    align-items: center;
 }
 
 .likes {
@@ -113,14 +119,6 @@ export default defineComponent({
     font-weight: 600;
     line-height: normal;
     text-align: center;
-
-    position: absolute;
-    top: 8%;
-    left: 14%;
-    margin: auto;
-    transform: translateY(25%);
-    transition: .3s ease;
-    opacity: 0;
 }
 
 /* DIV CONTENEDOR DE TITULO Y AUTOR */
@@ -129,7 +127,7 @@ export default defineComponent({
     font-family: 'Comfortaa', cursive;
     font-size: 11px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 900;
     line-height: normal;
 
 }
@@ -200,7 +198,8 @@ article img:last-child {
 
 }
 
-article:hover, article:focus {
+article:hover,
+article:focus {
     transform:
         perspective(250px) rotateX(10deg) translateY(-5%) translateZ(0);
 }
@@ -220,33 +219,30 @@ article::before {
     transition: all .3s ease;
 }
 
-article:hover::before, article:focus::before {
+article:hover::before,
+article:focus::before {
     opacity: 1;
 }
 
-article:hover img:last-child, article:focus img:last-child {
-    opacity: 1;
-    transform: translateY(10%);
-}
-
-article:hover .contenedorLibro, article:focus .contenedorLibro {
+article:hover img:last-child,
+article:focus img:last-child {
     opacity: 1;
     transform: translateY(10%);
 }
 
-article:hover .likes, article:focus .likes {
+article:hover .contenedorLibro,
+article:focus .contenedorLibro {
     opacity: 1;
     transform: translateY(10%);
 }
 
-article:hover .corazon, article:focus .corazon {
+article:hover .views,
+article:focus .views {
     opacity: 1;
     transform: translateY(10%);
 }
-
 
 /* Active */
-
 article:active {
     transform:
         perspective(250px) rotateX(10deg) translateY(-5%) translateZ(0);
@@ -266,50 +262,17 @@ article:active .contenedorLibro {
     transform: translateY(10%);
 }
 
-article:active .likes {
-    opacity: 1;
-    transform: translateY(10%);
-}
-
-article:active .corazon {
+article:active .views {
     opacity: 1;
     transform: translateY(10%);
 }
 
 /* Responsive de corazon, likes y simbolo abrir*/
-@media screen and (max-width: 1200px) {
-    .likes {
-        top: 10%;
-        left: 16%;
-    }
-}
-
 @media screen and (max-width: 800px) {
 
     .open {
         visibility: visible;
     }
 
-}
-
-@media screen and (max-width: 768px) {
-    .likes {
-        top: 8.5%;
-        left: 13.5%;
-    }
-}
-
-@media screen and (max-width: 460px) {
-    .likes {
-        top: 9%;
-        left: 14%;
-    }
-}
-
-@media screen and (max-width: 388px) {
-    .likes {
-        top: 9%;
-        left: 15.2%;
-    }
 }
 </style>
