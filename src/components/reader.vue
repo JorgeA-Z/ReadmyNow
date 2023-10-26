@@ -84,6 +84,8 @@ export default defineComponent({
     },
     next() {
 
+      this.handleTheme()
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       if (this.rendition.location.atEnd != true) {
@@ -97,6 +99,8 @@ export default defineComponent({
 
     },
     prev() {
+
+      this.handleTheme()
 
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); // 'smooth' proporciona un desplazamiento suave
 
@@ -162,10 +166,9 @@ export default defineComponent({
       return tiempoEnLaPagina
 
     },
-    changeReader() {
-      this.reader = !this.reader
+    changeReader(reader) {
 
-      switch (this.reader) {
+      switch (reader) {
         case true:
           this.rendition.spread("none")
           break;
@@ -174,15 +177,22 @@ export default defineComponent({
           break;
       }
     },
-    changeFont() {
-      if (this.font == 4) {
-        this.font = 0;
+    changeFont(operation) {
 
-      } else {
+      if(operation)
+      {
+        this.font = this.font - 1;
+
+      }else
+      {
         this.font = this.font + 1;
       }
 
       switch (this.font) {
+        case -1:
+            this.font = 0;
+          break;
+
         case 0:
           this.rendition.themes.default({ "p": { "font-size": "10px" } });
           break;
@@ -197,6 +207,9 @@ export default defineComponent({
           break;
         case 4:
           this.rendition.themes.default({ "p": { "font-size": "30px" } });
+          break;
+        case 5:
+            this.font = 4;
           break;
       }
     },
@@ -229,7 +242,6 @@ export default defineComponent({
       book: ref(),
       horaEntrada: ref(),
       bookmark: ref(false),
-      reader: ref(true),
       font: ref(1)
     };
   },
@@ -382,7 +394,7 @@ export default defineComponent({
       <!-- Reader 2 page -->
       <div>
 
-        <button class="botonesLector">
+        <button class="botonesLector" @click="changeReader(false)">
           <svg xmlns="http://www.w3.org/2000/svg" width="38" height="47" viewBox="0 0 49 54" fill="none"
             class="dosPaginas">
             <g clip-path="url(#clip0_400_445)">
@@ -415,10 +427,10 @@ export default defineComponent({
       <!-- input range -->
       <div class="d-flex contenedor">
 
-        <div>
+        <div @click="changeFont(true)">
           <span class="letraMinuscula">A</span>
         </div>
-        <div>
+        <div @click="changeFont(false)">
           <span class="letraMayuscula">A</span>
         </div>
 
@@ -427,7 +439,7 @@ export default defineComponent({
       <!-- Reader 1 page -->
       <div>
 
-        <button class="botonesLector">
+        <button class="botonesLector"  @click="changeReader(true)">
           <svg xmlns="http://www.w3.org/2000/svg" width="40" height="33" viewBox="0 0 42 35" fill="none"
             class="unaPagina">
             <path

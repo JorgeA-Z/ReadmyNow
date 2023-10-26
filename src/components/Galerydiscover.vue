@@ -272,33 +272,36 @@ export default defineComponent({
             var generosRecomendados = this.Recomendaciones(generosUsuario, generosPopulares, influenciaUsuario, influenciaPopularidad, generosLiterarios);
             this.books = this.LibrosRecomendados(generosRecomendados, libreroPopular);
         },
-        async getGlobalShelf() {
-            var libreroPopular = [];
+        async getGlobalShelf() {       
             const q = query(collection(db, "Libro"));
             const querySnapshot = await getDocs(q);
 
-            for (const doc of querySnapshot.docs) {
-                var book =
-                {
-                    //Datos solicitados para la IA organizados en la estructura del algoritmo
-                    TiempoGlobal: doc.get("TiempoGlobal"),
-                    Likes: doc.get("Likes"),
-                    Genero: doc.get("Genero"),
-                    Subgenero: doc.get("Subgenero"),
+            const autorRefs = querySnapshot.docs.map((doc) => doc.get('Autor'));
+            const autorDocs = await Promise.all(autorRefs.map((ref) => getDoc(ref)));
 
+            const books = querySnapshot.docs.map((doc, i) => {
+                const { TiempoGlobal, Likes, Genero, Subgenero, About, Caratula, Nombre, Url } = doc.data();
+                const AutorRef = doc.get('Autor');
+                const AutorDoc = autorDocs[i];
+
+                return {
+                    TiempoGlobal,
+                    Likes,
+                    Genero,
+                    Subgenero,
                     ID: doc.id,
+                    About,
+                    Autor: AutorRef,
+                    AutorName: AutorDoc.get('Nombre'),
+                    AutorLastName: AutorDoc.get('Apellido'),
+                    AutorURL: AutorDoc.get('Url'),
+                    Caratula,
+                    Nombre,
+                    Url,
+                };
+            });
 
-                    About: doc.get("About"),
-                    Autor: doc.get("Autor"),
-                    Caratula: doc.get("Caratula"),
-                    Nombre: doc.get("Nombre"),
-                    Libro: doc.get("Url"),
-                }
-                libreroPopular.push(book);
-
-            }
-            libreroPopular = this.Vectorizar(libreroPopular);
-            return libreroPopular;
+            return this.Vectorizar(books);
         },
 
 
@@ -333,8 +336,6 @@ export default defineComponent({
             const libreroVectorizado = this.Vectorizar(libreroUsuario);
             return libreroVectorizado;
         }
-
-
 
     },
     data: () => ({
@@ -376,27 +377,17 @@ export default defineComponent({
                 </span>
                 <router-link class="link" :to="'/Abook/' + b.ID">
 
-                    <!-- CORAZON Y lIKES-->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="42" viewBox="0 0 22 20" fill="none"
-                        class="mx-2 corazon">
-                        <path
-                            d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
-                            stroke="#7A60A9" fill="#7A60A9" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                    <span class="likes">100</span>
-
                     <!-- TITULO Y AUTOR -->
                     <div class="contenedorLibro">
-                        <span class="text-capitalize titulo">Algunas Notas Sobre Algo Que No Existe</span>
-                        <span class="text-capitalize autor">Brandon Sanderson</span>
+                        <span class="text-capitalize titulo">{{b.Nombre}}</span>
+                        <span class="text-capitalize autor">{{b.AutorName}}</span>
                     </div>
 
                     <!-- PORTADA LIRBO -->
                     <img class="img-fluid m-2 first-child" :src="b.Caratula" :alt="b.Nombre">
 
                     <!-- IMAGEN AUTOR-->
-                    <img class="last-child" src="https://imagessl.casadellibro.com/img/autores/112468-1.jpg" alt="">
+                    <img class="last-child" :src="b.AutorURL" alt="">
 
                 </router-link>
             </article>
