@@ -283,9 +283,10 @@ export default defineComponent({
                 const { TiempoGlobal, Likes, Genero, Subgenero, About, Caratula, Nombre, Url } = doc.data();
                 const AutorRef = doc.get('Autor');
                 const AutorDoc = autorDocs[i];
-
+                
+                var t = Math.ceil(TiempoGlobal);
                 return {
-                    TiempoGlobal,
+                    TiempoGlobal: t,
                     Likes,
                     Genero,
                     Subgenero,
@@ -376,6 +377,17 @@ export default defineComponent({
                     open_in_new
                 </span>
                 <router-link class="link" :to="'/Abook/' + b.ID">
+                    
+                    <!-- CORAZON Y lIKES-->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="42" viewBox="0 0 22 20" fill="none"
+                        class="mx-2 corazon">
+                        <path
+                            d="M15.1111 1C18.6333 1 21 4.3525 21 7.48C21 13.8138 11.1778 19 11 19C10.8222 19 1 13.8138 1 7.48C1 4.3525 3.36667 1 6.88889 1C8.91111 1 10.2333 2.02375 11 2.92375C11.7667 2.02375 13.0889 1 15.1111 1Z"
+                            stroke="#7A60A9" fill="#7A60A9" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <span class="likes">{{b.TiempoGlobal}}</span>
+
 
                     <!-- TITULO Y AUTOR -->
                     <div class="contenedorLibro">

@@ -44,7 +44,7 @@ export default {
       snapshot.forEach( async (doc) => {
         
         const AutorDoc = await getDoc(doc.get("Autor"));
-
+        
         var book =
         {
           //Datos solicitados para la IA organizados en la estructura del algoritmo
@@ -58,6 +58,9 @@ export default {
           
           AutorName: AutorDoc.get("Nombre"),
           AutorLastname: AutorDoc.get("Apellido"),
+          
+          AutorURL: AutorDoc.get('Url'),
+
 
           Caratula: doc.get("Caratula"),
           
