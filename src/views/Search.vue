@@ -44,7 +44,8 @@ export default {
       snapshot.forEach( async (doc) => {
         
         const AutorDoc = await getDoc(doc.get("Autor"));
-        
+        var t = doc.get("TiempoGlobal");
+        t = Math.ceil(t);
         var book =
         {
           //Datos solicitados para la IA organizados en la estructura del algoritmo
@@ -61,6 +62,7 @@ export default {
           
           AutorURL: AutorDoc.get('Url'),
 
+          TiempoGlobal: t,
 
           Caratula: doc.get("Caratula"),
           
