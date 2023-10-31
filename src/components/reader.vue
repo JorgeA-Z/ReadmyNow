@@ -595,7 +595,7 @@ export default defineComponent({
 @media screen and (max-width: 760px) {
   #area {
     width: 450px;
-    height: 500px;
+    height: 750px;
   }
 
   #area iframe {
@@ -652,7 +652,7 @@ export default defineComponent({
 @media screen and (max-width: 525px) {
   #area {
     width: 450px;
-    height: 500px;
+    height: 760px;
   }
 
   #area iframe {
@@ -709,7 +709,7 @@ export default defineComponent({
 @media screen and (max-width: 480px) {
   #area {
     width: 400px;
-    height: 500px;
+    height: 820px;
   }
 
   #area iframe {
