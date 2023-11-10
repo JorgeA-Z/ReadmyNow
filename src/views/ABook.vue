@@ -247,6 +247,11 @@ export default defineComponent({
 
     </div>
 
+    <div class="tags">
+      <span class="me-2 badge badge-pill badge-danger tags__genere--title">Filosofía</span>
+      <span class="badge badge-pill badge-danger tags__genere--subtitle">Filosofía</span>
+    </div>
+
     <!-- Gradiante que ira encima de la imagen -->
     <div class="gradient"></div>
 
@@ -299,6 +304,23 @@ export default defineComponent({
   z-index: 2;
   top: 76px;
   right: 15px;
+}
+
+.tags {
+  position: absolute;
+  z-index: 2;
+  top: 140px;
+  left: 20px;
+}
+
+.tags__genere--title {
+  font-size: 14px;
+  background-color: #7A60A9;
+}
+
+.tags__genere--subtitle {
+  font-size: 14px;
+  background-color: #9B88BE;
 }
 
 .equis {
@@ -451,6 +473,19 @@ export default defineComponent({
     width: 20px;
     height: 20px;
     flex-shrink: 0;
+  }
+
+  .tags {
+    top: 120px;
+    left: 20px;
+  }
+
+  .tags__genere--title {
+    font-size: 12px;
+  }
+
+  .tags__genere--subtitle {
+    font-size: 12px;
   }
 
 }

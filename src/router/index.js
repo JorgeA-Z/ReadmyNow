@@ -24,6 +24,15 @@ const router = createRouter({
         { path: "/Galery", component: () => import("../views/Galery.vue"), meta: {requiresAuth: true,
         } 
         },
+        { path: "/Terms", component: () => import("../views/Terms.vue"), meta: {requiresAuth: true,
+        } 
+        },
+        { path: "/Privacy", component: () => import("../views/Privacy.vue"), meta: {requiresAuth: true,
+        } 
+        },
+        { path: "/Aboutus", component: () => import("../views/Aboutus.vue"), meta: {requiresAuth: true,
+        } 
+        },
 
 
     ],

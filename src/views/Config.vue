@@ -87,23 +87,40 @@ const name = auth.currentUser.displayName;
         <h4 class="account">More</h4>
 
         <div class="mt-5 d-flex justify-content-between">
+          
+          <router-link to="/Aboutus" class="link">
+            <h4 class="text">About us </h4>
+          </router-link>
 
-          <h4 class="text">About us </h4>
-          <Direction />
+          <router-link to="/Aboutus" class="link">
+            <Direction />
+          </router-link>
+
+        </div>
+
+        <div class="mt-3 d-flex justify-content-between">
+          
+          <router-link to="/Privacy" class="link">
+            <h4 class="text">Privacy policy </h4>
+          </router-link>
+
+          <router-link to="/Privacy" class="link">
+            <Direction />
+          </router-link>
 
         </div>
 
         <div class="mt-3 d-flex justify-content-between">
 
-          <h4 class="text">Privacy policy </h4>
-          <Direction />
+          
+          <router-link to="/Terms" class="link">
+            <h4 class="text">Terms and conditions </h4>
+          </router-link>
 
-        </div>
-
-        <div class="mt-3 d-flex justify-content-between">
-
-          <h4 class="text">Terms and conditions </h4>
-          <Direction />
+          <router-link to="/Terms" class="link">
+            <Direction />
+          </router-link>
+          
 
         </div>
 
@@ -113,6 +130,10 @@ const name = auth.currentUser.displayName;
 </template>
 
 <style scoped>
+.link {
+  text-decoration: none;
+}
+
 .dark .text {
   color: white;
 }
