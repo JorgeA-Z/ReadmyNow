@@ -248,8 +248,8 @@ export default defineComponent({
     </div>
 
     <div class="tags">
-      <span class="me-2 badge badge-pill badge-danger tags__genere--title">Filosofía</span>
-      <span class="badge badge-pill badge-danger tags__genere--subtitle">Filosofía</span>
+      <span class="me-2 badge badge-pill badge-danger tags__genere--title">{{ bookData.Genero }}</span>
+      <span class="badge badge-pill badge-danger tags__genere--subtitle">{{ bookData.Subgenero }}</span>
     </div>
 
     <!-- Gradiante que ira encima de la imagen -->

@@ -23,8 +23,11 @@ export default defineComponent({
 
   },
   data: () => ({
-    isLoading: ref(true)
-
+    isLoading: ref(true),
+    generos: ["Novela", "Ensayo",  "Terror",
+                    "Filosofia", 
+                    "Cuentos", "C.Ficcion",
+                    "Poesia", "Teatro", "Help"],
   }),
   mounted() {
     setTimeout(() => {
@@ -40,13 +43,14 @@ export default defineComponent({
   <Text />
   <Nabvar/>
 
-  <div class="m-4">
-    <span class="text">ALL BOOKS</span>
+  
 
-    <GaleryList></GaleryList>
-
-
+  <div class="m-4" v-for="(genero, index) in generos" :key="index">
+    <span class="text">{{ genero }} COLLECTION</span>
+      <GaleryList :Categoria="genero"></GaleryList>
+      
   </div>
+
 </template>
 
 <style scoped>
